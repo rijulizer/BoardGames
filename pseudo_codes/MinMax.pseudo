@@ -1,0 +1,47 @@
+// Min Max Algorithm
+function minimax(position, depth, maximizingPlayer)
+    if depth == 0 or game over in position
+        return static evalaation of posotion 
+
+    if maximizingPlayer
+        maxEval = -infinity
+        for each child of position
+            eval  = minimax(child, depth-1, False)
+            maxEval = max(maxEval, eval)
+        return maxEval
+    if
+    minEval = +infinity
+    for each child of position
+        eval  = minimax(child, depth-1, True)
+        maxEval = min(maxEval, eval)
+    return maxEval
+
+//initial call
+minimax(currentPosition, 3, True)
+
+// alpha- beta algorithm
+function minimax(position, depth, alpha, beta, maximizingPlayer)
+    if depth == 0 or game over in position
+        return static evalaation of posotion 
+
+    if maximizingPlayer
+        maxEval = -infinity
+        for each child of position
+            eval  = minimax(child, depth-1, alpha, beta,  False)
+            maxEval = max(maxEval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha
+                break
+        return maxEval
+    if
+    minEval = +infinity
+    for each child of position
+        eval  = minimax(child, depth-1, alpha, beta, True)
+        maxEval = min(maxEval, eval)
+        beta = min(beta, eval)
+        if beta <= alpha
+            break
+    return maxEval
+
+//initial call
+minimax(currentPosition, 3, -infinity, +infinity, True)
