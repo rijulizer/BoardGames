@@ -1,6 +1,6 @@
 # Constants
 WIDTH, HEIGHT = 800, 800
-GRID_RADIUS = 6  # Grid radius, determines the size of the grid
+# GRID_RADIUS = 6  # Grid radius, determines the size of the grid
 HEX_SIZE = 40  # Hexagon size
 BG_COLOR = (117, 228, 250)
 HEX_COLOR = (89, 86, 82)
@@ -22,6 +22,10 @@ PLAYERS = {
     }
 }
 
+TRAP_PATTERN = [
+    [PLAYERS["p1"]["symbol"], PLAYERS["p2"]["symbol"], PLAYERS["p2"]["symbol"],PLAYERS["p1"]["symbol"]],
+    [PLAYERS["p2"]["symbol"], PLAYERS["p1"]["symbol"], PLAYERS["p1"]["symbol"],PLAYERS["p2"]["symbol"]],
+]
 # manually create the hex grid cube co-ordinates
 HEX_GRID_CORDS = {
         # x=0, y<0
@@ -139,5 +143,8 @@ HEX_GRID_CORDS = {
 
 # Create flat map grid to map (q,r) to sqare matrix and fill with -1. 
 # This will be used to check contiguous occurence of player tokens
-HEX_GRID_FLAT_MAP = [[-1 for r in range(0,10)] for q in range(0,11)]
+# (0,q,r) -> player symbols
+# (1,q,r) -> mapping from flat_map to hex_info
+HEX_GRID_FLAT_MAP = [[[-1 for r in range(0,10)] for q in range(0,11)],
+                     [[None for r in range(0,10)] for q in range(0,11)]]
 

@@ -1,7 +1,9 @@
+// source: https://www.youtube.com/watch?v=l-hh51ncgDI&list=PLuhvsLOLKg1faQgQvQzlfbSnKQBjuM9Yp&index=1&t=20s
+
 // Min Max Algorithm
 function minimax(position, depth, maximizingPlayer)
     if depth == 0 or game over in position
-        return static evalaation of posotion 
+        return static evaluation of posotion 
 
     if maximizingPlayer
         maxEval = -infinity
@@ -22,7 +24,7 @@ minimax(currentPosition, 3, True)
 // alpha- beta algorithm
 function minimax(position, depth, alpha, beta, maximizingPlayer)
     if depth == 0 or game over in position
-        return static evalaation of posotion 
+        return static evaluation of posotion 
 
     if maximizingPlayer
         maxEval = -infinity
@@ -45,3 +47,63 @@ function minimax(position, depth, alpha, beta, maximizingPlayer)
 
 //initial call
 minimax(currentPosition, 3, -infinity, +infinity, True)
+
+//  Negamax algorithm
+
+function negamax(position, depth, playerTurn)
+    // playerTurn is either -1 or 1  
+    if depth == 0 or game over in position
+        return playerTurn * evaluation(position) 
+
+    maxEval = -infinity
+    for each child of position
+        eval  = -negamax(child, depth-1, -playerTurn)
+        maxEval = max(maxEval, eval)
+    return maxEval
+
+// # consider starting from the Min players point of view
+// root function that calls the recursive function
+function negamax_root(position, depth):
+    best_move = Null
+    best_value = -infinity
+    for each child of position
+        // since, starting from the min players point of view so,
+        //  initial playerTurn =-1, other wise it should be +1
+        value  = -negamax(child, depth-1, -1)
+        if value > best_value
+            best_value = max(best_value, value)
+            best_move = position
+    return best_move
+
+// Negamax with alpha-beta
+
+function negamax_ab(position, depth, alpha, beta, playerTurn)
+    // playerTurn is either -1 or 1  
+    if depth == 0 or game over in position
+        return playerTurn * evaluation(position) 
+
+    maxEval = -infinity
+    for each child of position
+        eval  = -negamax(child, depth-1, -beta, -alpha, -playerTurn)
+        maxEval = max(maxEval, eval)
+        alpha = max(alpha, eval)
+        if alpha >= beta:
+            break
+    return maxEval
+
+// # consider starting from the Min players point of view
+// root function that calls the recursive function
+function negamax_ab_root(position, depth, alpha, beta):
+    best_move = Null
+    best_value = -infinity
+    for each child of position
+        // since, starting from the min players point of view so,
+        //  initial playerTurn =-1, other wise it should be +1
+        value  = -negamax(child, depth-1, -beta, -alpha, -1)
+        if value > best_value
+            best_value = max(best_value, value)
+            best_move = position
+        alpha = max(alpha, value)
+        if alpha >= beta:
+            break // alpha- beta prunning
+    return best_move
