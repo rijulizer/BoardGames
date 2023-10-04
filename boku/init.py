@@ -1,5 +1,5 @@
 # Constants
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = 1200, 800
 # GRID_RADIUS = 6  # Grid radius, determines the size of the grid
 HEX_SIZE = 40  # Hexagon size
 BG_COLOR = (117, 228, 250)

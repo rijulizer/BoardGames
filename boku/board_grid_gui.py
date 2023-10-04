@@ -49,6 +49,50 @@ def draw_circle(circle_info):
     pygame.draw.circle(screen, player_color, center_cords, radius)
     pygame.draw.circle(screen, border_color, center_cords, radius, border_width)
 
+def create_hist_box(hist_stat: list, pos : tuple[int,int], scrolling_offset, max_scroll):
+    """
+    draws history box in the right side of the window
+    """
+    # declare variables
+    # Define colors
+    text_color = (247, 229, 205)
+    text_box_color = (0, 0, 0)
+    scrollbar_color = (150, 150, 150)
+    scrollbar_button_color = (100, 100, 100)
+    text_line_space = 30
+    box_height, box_width = 600, 350
+    
+    pos_x, pos_y = pos
+    # Create a rectangle for the text box
+    text_box_rect = pygame.Rect(pos_x, pos_y, box_width, box_height)
+    # Create a surface for the text box
+    text_box_surface = pygame.Surface((text_box_rect.width, text_box_rect.height))
+    text_box_surface.fill(text_box_color)
+
+    # Create a rectangle for the scrollbar
+    scrollbar_rect = pygame.Rect(pos_x + box_width - 20, pos_y, 10, box_height)
+    scrollbar_button_rect = pygame.Rect(pos_x + box_width - 20, pos_y, 10, 20)
+    
+    # Create a font for the text
+    font = pygame.font.Font(None, 24)
+    # Render and display text lines within the text box
+    y = 0
+    for line in hist_stat:
+        text = font.render(line, True, text_color)
+        if y - scrolling_offset > text_box_rect.height:
+            break
+        text_box_surface.blit(text, (20, y - scrolling_offset))
+        y += text_line_space
+
+    screen.blit(text_box_surface, text_box_rect.topleft)
+
+    # Draw the scrollbar
+    pygame.draw.rect(screen, scrollbar_color, scrollbar_rect)
+    # Calculate the position of the scrollbar button based on scrolling offset and max_scroll
+    if max_scroll != 0:
+        scrollbar_button_rect.top = 10 + (scrolling_offset / max_scroll) * (text_box_rect.height - 50)
+    pygame.draw.rect(screen, scrollbar_button_color, scrollbar_button_rect)
+
 
 # def check_contiguous_players(grid_flat_map, player, n):
 
@@ -222,11 +266,12 @@ def capture_move(
         player: str, 
         detected_capture_moves: list, 
         player_captured_last: dict[str: tuple[int, int]],
+        history_text: list[str],
         ):
     
     shifted_q, shifted_r = flat_map_gird(clicked_hex_name)
     # pos_in_flatmap = HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-    # oppn_player = list(set(PLAYERS.keys()) - set([player]))[0]
+    oppn_player = list(set(PLAYERS.keys()) - set([player]))[0]
     # Since the player has already been switched so player holds the opponent player 
     # TODO: check if cheking of opponent trapped in between is needed or not
     # opponent_trap_windows = [trap_window[1:3] for trap_window in detected_capture_moves if trap_window[0] != PLAYERS[player]['symbol']]
@@ -234,7 +279,9 @@ def capture_move(
         if [shifted_q, shifted_r] in trap_window:
             HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1 # empty captured position
             # add captured move to illegal psotions for the next move
-            player_captured_last[player] = [shifted_q,shifted_r] # make the position 
+            player_captured_last[player] = [shifted_q,shifted_r] # make the position
+
+            history_text.append(f"Player - {oppn_player} captures - {clicked_hex_name}")
     # print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
     # pprint(HEX_GRID_FLAT_MAP[0])
     print("[DEBUG]- [capture_move]- player_captured_last", player_captured_last)
@@ -308,6 +355,11 @@ def play_game_multiuser():
     }
     detected_traps = []
     detected_capture_moves = []
+    text_line_space = 30
+    # Calculate the maximum scrolling range
+    max_scroll = 0
+    scrolling_offset = 0
+    history_text = [f"Game Starts!! Starting Player Turn- {player}"]
     running = True
     while running:
         # check for quit by user
@@ -329,7 +381,8 @@ def play_game_multiuser():
                             # check if the move is vald or not
                             if check_valid_move(clicked_hex_name, player, player_captured_last):
                                 # make move on the flat_board
-                                make_move(clicked_hex_name, player, tokens) 
+                                make_move(clicked_hex_name, player, tokens)
+                                history_text.append(f"{player} moves to - {clicked_hex_name}") 
                                 # Check the board if game is over and get trap positions
                                 game_over, detected_traps =  check_board(
                                     HEX_GRID_FLAT_MAP[0], 
@@ -347,7 +400,7 @@ def play_game_multiuser():
                                     print(f"[DEBUG]-[main]- detected_capture_moves are - ")
                                     pprint(detected_capture_moves)
                                     print(f"[DEBUG]-[main]- Entering - Capture Mode")
-        
+                                    # history_text.append(f"Entering - Capture Mode")
                                 # refresh any illegal move due to capture in prev turn
                                 player_captured_last ={
                                     'p1': None,
@@ -355,6 +408,7 @@ def play_game_multiuser():
                                 }
                                 if game_over:
                                     print(f"[DEBUG]-[play_game_multiuser]-game over winner- {player}")
+                                    history_text.append(f"Game Over !! Winner- {player}")
                                     # break
                                 # switch player
                                 if player == "p1":
@@ -363,22 +417,33 @@ def play_game_multiuser():
                                     player = "p1"
                             else:
                                 print("[DEBUG]-[main]- [check_valid_move]- Invalid Move!")
+                                history_text.append(f"Invalid Move!")
                         else: # game in capture flow
                             print(f"[DEBUG]-[main]- game in - Capture Mode")
                             capture_move(
                                 clicked_hex_name, 
                                 player, 
                                 detected_capture_moves, 
-                                player_captured_last
+                                player_captured_last,
+                                history_text,
                                 )
                             # empty the detected capture moves so that each turn it will check 
                             detected_capture_moves = []
                             print(f"[DEBUG]-[main]- Exiting - Capture Mode")
                             # click anywhere else in the board to not capture
+                            
+
+                        # Calculate the maximum scrolling range
+                        max_scroll = max(0, len(history_text) * text_line_space - 600)
+                        scrolling_offset = max_scroll
 
                     else:
                         print("[DEBUG]-[main]-[clicked_hex_name]- Invalid Move!")
-
+                        history_text.append(f"Invalid Move!")
+                if event.button == 4:  # Scroll up
+                    scrolling_offset = max(0, scrolling_offset - 20)
+                elif event.button == 5:  # Scroll down
+                    scrolling_offset = min(max_scroll, scrolling_offset + 20)
 
         # display blank screen
         screen.fill(BG_COLOR)
@@ -393,6 +458,7 @@ def play_game_multiuser():
         if len(detected_capture_moves) >0:
             highlight_capture_moves(detected_capture_moves)
         
+        create_hist_box(history_text, (800,150), scrolling_offset, max_scroll)
         pygame.display.flip()
         clock.tick(60)
 

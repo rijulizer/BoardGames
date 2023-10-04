@@ -23,7 +23,7 @@ def create_hex_vertices(cube_cordinates: list[int]):
     q,r = cube_cordinates[0], cube_cordinates[1]
     s = -q -r 
     # get the center of the screen
-    screen_center_x, screen_center_y = WIDTH // 2, HEIGHT // 2 - 50
+    screen_center_x, screen_center_y = WIDTH // 2 - 200, HEIGHT // 2 - 50
     # get center co-ordinates of a hex
     center_cordinates = cube_to_pixel(cube_cordinates)
     # offset center to screen center
