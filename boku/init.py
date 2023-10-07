@@ -3,7 +3,8 @@ class BoardVariables():
     The class has all the neccessary variables which should be initialized
     """
     def __init__(self,):
-
+        
+        print("[DEBUG]- Initiating Board Variables...")
         # Constants
         self.WIDTH, self.HEIGHT = 1200, 800
         # GRID_RADIUS = 6  # Grid radius, determines the size of the grid
