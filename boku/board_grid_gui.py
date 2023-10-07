@@ -454,7 +454,7 @@ def play_game_multiuser():
         
         draw_player_tokens()
         # indicate player turn
-        draw_circle([(620,70), player])
+        draw_circle([(800,70), player])
         if len(detected_capture_moves) >0:
             highlight_capture_moves(detected_capture_moves)
         
