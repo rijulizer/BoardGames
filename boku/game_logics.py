@@ -178,18 +178,67 @@ class GameLogics():
             pprint("[DEBUG] - [EVENTS] - [detect_capture_move]- event added - \n")
             pprint(self.events[-5:])
 
-    def capture_move(
+    def check_click_capture_hex(
+            self,
+            clicked_hex_name: str, 
+            ):
+        """
+        Checks if one of the capture hex is clicked during capturing move or not
+        """
+        shifted_q, shifted_r = self.geometry.flat_map_gird(clicked_hex_name)
+        # Since the player has already been switched so player holds the opponent player 
+        for trap_window in self.detected_capture_moves:
+            if [shifted_q, shifted_r] in trap_window:
+                return True
+        return False
+                
+        
+    def capture_move_v2(
             self,
             clicked_hex_name: str, 
             player: str,
             ):
+        """
+        only capture move is passed: 
+        """
         
         shifted_q, shifted_r = self.geometry.flat_map_gird(clicked_hex_name)
         # pos_in_flatmap = HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
         oppn_player = list(set(self.variables.PLAYERS.keys()) - set([player]))[0]
         # Since the player has already been switched so player holds the opponent player 
-        # TODO: check if cheking of opponent trapped in between is needed or not
-        # opponent_trap_windows = [trap_window[1:3] for trap_window in detected_capture_moves if trap_window[0] != PLAYERS[player]['symbol']]
+        removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
+        self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1 # empty captured position
+        # add captured move to illegal psotions for the next move
+        self.player_captured_last[player] = [shifted_q,shifted_r]
+
+        self.history_text.append(f"{oppn_player} - captures - {clicked_hex_name}")
+        # add capture event
+        self.events.append({
+        "capture":{
+            "captured_hex": clicked_hex_name,
+            "player_turn": oppn_player,
+            "detected_capture_moves": self.detected_capture_moves,
+            "captured_hex_flat_cords": [shifted_q, shifted_r],
+            "removed_symbol":  removed_symbol,
+            "redo_flag_ind": True
+            }
+        })
+        pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
+        pprint(self.events[-5:])
+    
+    def capture_move(
+            self,
+            clicked_hex_name: str, 
+            player: str,
+            ):
+        """
+        May or may not capture logic
+        """
+        
+        shifted_q, shifted_r = self.geometry.flat_map_gird(clicked_hex_name)
+        # pos_in_flatmap = HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
+        oppn_player = list(set(self.variables.PLAYERS.keys()) - set([player]))[0]
+        # Since the player has already been switched so player holds the opponent player 
         for trap_window in self.detected_capture_moves:
             if [shifted_q, shifted_r] in trap_window:
                 removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
@@ -211,10 +260,12 @@ class GameLogics():
                 })
                 pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
                 pprint(self.events[-5:])
-        # print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
-        # pprint(HEX_GRID_FLAT_MAP[0])
-        # print("[DEBUG]- [capture_move]- player_captured_last", self.player_captured_last)
-    
+            
+
+# print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
+# pprint(HEX_GRID_FLAT_MAP[0])
+# print("[DEBUG]- [capture_move]- player_captured_last", self.player_captured_last)
+
     def reset_last_captured(self):
         self.player_captured_last ={
         'p1': None,
