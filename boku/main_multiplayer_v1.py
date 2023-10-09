@@ -12,7 +12,10 @@ from game_logics import GameLogics
 from graphics import Graphics
 
 
-def play_game_multiuser():
+def play_game_multiuser_v1():
+    """
+    Player may or may not capture after a capture move
+    """
 
     board_variables = BoardVariables()
     board_geometry = BoardGeometry(board_variables)
@@ -29,6 +32,9 @@ def play_game_multiuser():
     restart_button_rect = pygame.Rect(900, 40, 150, 50)  # Define the restart button's position and size
     undo_button_rect = pygame.Rect(850, 100, 30, 30)
     redo_button_rect = pygame.Rect(1070, 100, 30, 30)
+    # Create a font for text
+    game_over_font = pygame.font.Font(None, 60)   
+    game_over_text = game_over_font.render("Game Over", True, (0,0,0))
     
     graphics = Graphics(screen, board_variables)
 
@@ -40,6 +46,7 @@ def play_game_multiuser():
     # Calculate the maximum scrolling range
     max_scroll = 0
     scrolling_offset = 0
+    game_over = False
     running = True
     while running:
         # check for quit by user
@@ -64,6 +71,7 @@ def play_game_multiuser():
                         game_logics = GameLogics(board_variables, board_geometry)
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
+                        game_over = False
                         
                     # Undo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, undo_button_rect):
@@ -80,7 +88,7 @@ def play_game_multiuser():
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
                     else:
-                        if clicked_hex_name: # if user actually clicks on a hex
+                        if clicked_hex_name and not(game_over): # if user actually clicks on a hex
                             if not(len(game_logics.detected_capture_moves) > 0): # game in normal flow
                             
                                 print(f"[DEBUG]-[main]- game in - Normal Flow")
@@ -107,7 +115,7 @@ def play_game_multiuser():
                                     game_logics.reset_last_captured()
                                     if game_over:
                                         print(f"[DEBUG]-[play_game_multiuser]-game over winner- {player}")
-                                        game_logics.history_text.append(f"Game Over !! Winner- {player}")
+                                        game_logics.history_text.append(f"[Game Over] Winner is - {player} !!")
                                         # break
                                     # switch player
                                     if player == "p1":
@@ -145,27 +153,31 @@ def play_game_multiuser():
         screen.fill(board_variables.BG_COLOR)
         # Draw the restart button
         graphics.draw_button(restart_button_rect.x, restart_button_rect.y, restart_button_rect.width, restart_button_rect.height, "Restart")
-        # Draw the Undo button
-        graphics.draw_button(undo_button_rect.x, undo_button_rect.y, undo_button_rect.width, undo_button_rect.height, "<")
-        # Draw the Undo button
-        graphics.draw_button(redo_button_rect.x, redo_button_rect.y, redo_button_rect.width, redo_button_rect.height, ">")
+        if not game_over:
+                
+            # Draw the Undo button
+            graphics.draw_button(undo_button_rect.x, undo_button_rect.y, undo_button_rect.width, undo_button_rect.height, "<")
+            # Draw the Undo button
+            graphics.draw_button(redo_button_rect.x, redo_button_rect.y, redo_button_rect.width, redo_button_rect.height, ">")
 
-        # Draw board and player tokens
-        # draw the hexagonal grid
-        for hex_name, hex_points in board_variables.HEX_GRID_CORDS.items():
-            graphics.draw_hexagon(hex_points,hex_name)
-        
-        # draw a player whenver player clicks on the board
-        graphics.draw_player_tokens()
-        
-        # indicate player turn
-        graphics.draw_circle([(800,70), player])
-        if len(game_logics.detected_capture_moves) >0:
-            graphics.highlight_capture_moves(game_logics.detected_capture_moves)
-            # in capture mode retain existing player 
-            # as player has been flipped , flip again
-            graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
-        graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
+            # Draw board and player tokens
+            # draw the hexagonal grid
+            for hex_name, hex_points in board_variables.HEX_GRID_CORDS.items():
+                graphics.draw_hexagon(hex_points,hex_name)
+            
+            # draw a player whenver player clicks on the board
+            graphics.draw_player_tokens()
+            
+            # indicate player turn
+            graphics.draw_circle([(800,70), player])
+            if len(game_logics.detected_capture_moves) >0:
+                graphics.highlight_capture_moves(game_logics.detected_capture_moves)
+                # in capture mode retain existing player 
+                # as player has been flipped , flip again
+                graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
+            graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
+        else: # game over
+            screen.blit(game_over_text, (board_variables.WIDTH // 2 - 200, board_variables.HEIGHT // 2 - 100))
         pygame.display.flip()
         clock.tick(60)
 
@@ -174,42 +186,4 @@ def play_game_multiuser():
     sys.exit()
 
 if __name__=="__main__":
-    play_game_multiuser()
-
-
-# # Initialize Pygame Menu
-# menu = pygame_menu.Menu("Menu Bar", WIDTH, 30, theme=pygame_menu.themes.THEME_DEFAULT)
-
-# # Define menu buttons and their actions
-# def rules_action():
-#     print("Rules selected")
-
-# def restart_action():
-#     print("Restart selected")
-
-# def undo_action():
-#     print("Undo Last Move selected")
-
-# menu.add_button("Rules", rules_action)
-# menu.add_button("Restart", restart_action)
-# menu.add_button("Undo Last Move", undo_action)
-
-# # Main game loop
-# running = True
-
-# while running:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-
-#     # Clear the screen
-#     screen.fill(BG_COLOR)
-
-#     # Update and render the menu
-#     menu.update(pygame.event.get())
-#     menu.draw(screen)
-
-#     pygame.display.flip()
-
-# # Quit Pygame
-# pygame.quit()
+    play_game_multiuser_v1()
