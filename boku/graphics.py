@@ -149,3 +149,16 @@ class Graphics():
             assert len(vertices) ==6, "[Debug] hex points are incorrect"
             pygame.draw.polygon(self.screen, highlight_color, vertices, highlight_hex_width)
             
+    # Function to draw a button
+    def draw_button(self, x, y, width, height, text):
+        BUTTON_COLOR = (200, 200, 200)
+        TEXT_COLOR = (0, 0, 0)
+        pygame.draw.rect(self.screen, BUTTON_COLOR, (x, y, width, height))
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(text, True, TEXT_COLOR)
+        text_rect = text_surface.get_rect(center=(x + width // 2, y + height // 2))
+        self.screen.blit(text_surface, text_rect)
+
+    # Function to check if a point is inside a rectangle
+    def is_point_inside_rect(self, x, y, rect):
+        return rect.collidepoint(x, y)
