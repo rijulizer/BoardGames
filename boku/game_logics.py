@@ -363,6 +363,57 @@ class GameLogics():
             self.history_text.append(f"[Rodo] - {player} - captures - {captured_hex}")
             return oppn_player
         
+    def play_user(self, clicked_hex_name: str, player: str):
+        """
+        """
+        game_over = False # default declaration
+            
+        # normal flow of game (capture not detected)
+        if not(len(self.detected_capture_moves) > 0):
+            # check if the move is vald or not
+            if self.check_valid_move(clicked_hex_name, player):
+                # make move on the flat_board
+                self.make_move(clicked_hex_name, player)
+                # Check the board if game is over and get trap positions
+                game_over, detected_traps =  self.check_board(player)
+                
+                # check if current move can lead to a capture
+                # for inital few turns- detected_traps=[], detected_capture_moves=[]
+                self.detect_capture_move(clicked_hex_name, player, detected_traps)
+                
+                # if (len(self.detected_capture_moves) > 0): # debugging purpose
+                #     print(f"[DEBUG]-[main]- game_logics.detected_capture_moves are - ")
+                #     pprint(self.detected_capture_moves)
+                #     print(f"[DEBUG]-[main]- Entering - Capture Mode")
+                # in normal move, refresh any illegal move due to capture in prev turn
+                self.reset_last_captured()
+                if game_over:
+                    print(f"[DEBUG]-[play_game_multiuser]-game over winner- {player}")
+                    self.history_text.append(f"[Game Over] Winner is - {player} !!")
+                    # break
+                
+                # switch player
+                player = self.get_opponent_player(player)
+            else:
+                print("[DEBUG]-[main]- [check_valid_move]- Invalid Move!")
+                self.history_text.append(f"Invalid Move!")
+
+        else: # game in capture flow
+            print(f"[DEBUG]-[main]- game in - Capture Mode")
+            # check if user is clicking on valid capture hex
+            if (self.check_click_capture_hex(clicked_hex_name)):
+                
+                self.capture_move_v2(
+                    clicked_hex_name, 
+                    player,
+                    )
+                # empty the detected capture moves so that each turn it will check 
+                self.detected_capture_moves = []
+                print(f"[DEBUG]-[main]- Exiting - Capture Mode")
+                # click anywhere else in the board to not capture
+            else:
+                self.history_text.append(f"Invalid Move!, you have to capture.")
+        return game_over, player
 
 
 if __name__ == "__main__":

@@ -60,7 +60,7 @@ def play_game_multiuser_v2():
                     clicked_hex_name = board_geometry.find_hex_center_near_mouse_click(mouse_x, mouse_y)
                     print("#"*30)
                     
-                    # restart
+                    # Restart
                     if graphics.is_point_inside_rect(mouse_x, mouse_y, restart_button_rect):
                         print("[DEBUG]-[main]-Restart button clicked")  # Perform restart action here
                         board_variables = BoardVariables()
@@ -85,53 +85,11 @@ def play_game_multiuser_v2():
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
                     
-                    else:
+                    # Game Steps
+                    else: 
                         if clicked_hex_name and not(game_over): # if user actually clicks on a hex
                             
-                            # normal flow of game (capture not detected)
-                            if not(len(game_logics.detected_capture_moves) > 0):
-                                # check if the move is vald or not
-                                if game_logics.check_valid_move(clicked_hex_name, player):
-                                    # make move on the flat_board
-                                    game_logics.make_move(clicked_hex_name, player)
-                                    # Check the board if game is over and get trap positions
-                                    game_over, detected_traps =  game_logics.check_board(player)
-                                    # check if current move can lead to a capture
-                                    # for inital few turns- detected_traps=[], detected_capture_moves=[]
-                                    game_logics.detect_capture_move(clicked_hex_name, player, detected_traps)
-                                    
-                                    if (len(game_logics.detected_capture_moves) > 0):
-                                        print(f"[DEBUG]-[main]- game_logics.detected_capture_moves are - ")
-                                        pprint(game_logics.detected_capture_moves)
-                                        print(f"[DEBUG]-[main]- Entering - Capture Mode")
-                                        # refresh any illegal move due to capture in prev turn
-                                        game_logics.reset_last_captured()
-                                    if game_over:
-                                        print(f"[DEBUG]-[play_game_multiuser]-game over winner- {player}")
-                                        game_logics.history_text.append(f"[Game Over] Winner is - {player} !!")
-                                        # break
-                                    # switch player
-                                    player = game_logics.get_opponent_player(player)
-                                else:
-                                    print("[DEBUG]-[main]- [check_valid_move]- Invalid Move!")
-                                    game_logics.history_text.append(f"Invalid Move!")
-
-                            else: # game in capture flow
-                                print(f"[DEBUG]-[main]- game in - Capture Mode")
-                                if (game_logics.check_click_capture_hex(clicked_hex_name)):
-                                    game_logics.capture_move_v2(
-                                        clicked_hex_name, 
-                                        player,
-                                        )
-                                    # empty the detected capture moves so that each turn it will check 
-                                    game_logics.detected_capture_moves = []
-                                    print(f"[DEBUG]-[main]- Exiting - Capture Mode")
-                                    # click anywhere else in the board to not capture
-                                else:
-                                    game_logics.history_text.append(f"Invalid Move!, you have to capture.")
-
-                                    
-
+                            game_over, player = game_logics.play_user(clicked_hex_name, player)
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
                             scrolling_offset = max_scroll
