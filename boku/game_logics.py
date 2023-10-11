@@ -193,27 +193,27 @@ class GameLogics():
     def capture_move_v2(
             self,
             clicked_hex_name: str, 
-            player: str,
+            oppn_player: str,
             ):
         """
-        only capture move is passed: 
+        oppn_player: takes the opponent player # logic is compatible with 2 player version 
+        only valid capture move is passed: 
         """
         
         shifted_q, shifted_r = self.geometry.flat_map_gird(clicked_hex_name)
-        # pos_in_flatmap = HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-        oppn_player = list(set(self.variables.PLAYERS.keys()) - set([player]))[0]
-        # Since the player has already been switched so player holds the opponent player 
+        # get the player whos turn it was.
+        player = list(set(self.variables.PLAYERS.keys()) - set([oppn_player]))[0]
         removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
         self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
         # add captured move to illegal psotions for the next move
-        self.player_captured_last[player] = [shifted_q, shifted_r]
+        self.player_captured_last[oppn_player] = [shifted_q, shifted_r]
 
-        self.history_text.append(f"{oppn_player} - captures - {clicked_hex_name}")
+        self.history_text.append(f"{player} - captures - {clicked_hex_name}")
         # add capture event
         self.events.append({
         "capture":{
             "captured_hex": clicked_hex_name,
-            "player_turn": oppn_player,
+            "player_turn": player,
             "detected_capture_moves": self.detected_capture_moves,
             "captured_hex_flat_cords": [shifted_q, shifted_r],
             "removed_symbol":  removed_symbol,
@@ -359,6 +359,9 @@ class GameLogics():
         
     def play_user(self, clicked_hex_name: str, player: str):
         """
+        Normal Flow: checks if move is valid, Places token in board, checks game over, detects capture moves
+            Returns: game_over flag and opponent player, flag_valid_move
+        Capture Flow: checks if capture move is valid, Places token in board, checks game over, detects capture moves
         """
         game_over = False # default declaration
             

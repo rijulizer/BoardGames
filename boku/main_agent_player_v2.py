@@ -14,7 +14,7 @@ from agents import Agent
 
 def play_game_agent_user():
     """
-    Player have to capture after a capture move
+    Agent is Search Based Player
     """
 
     board_variables = BoardVariables()
@@ -75,6 +75,9 @@ def play_game_agent_user():
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
                         game_over = False
+                        # Calculate the maximum scrolling range
+                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                        scrolling_offset = max_scroll
                         
                     # Undo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, undo_button_rect):
@@ -83,6 +86,9 @@ def play_game_agent_user():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to undo...")
                             game_logics.history_text.append(f"No events to undo.")
+                        # Calculate the maximum scrolling range
+                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                        scrolling_offset = max_scroll
                     # Redo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, redo_button_rect):
                         if len(game_logics.events_redo) > 0:
@@ -90,6 +96,9 @@ def play_game_agent_user():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
+                        # Calculate the maximum scrolling range
+                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                        scrolling_offset = max_scroll
         
                     # Game Steps
                     else: 
@@ -105,16 +114,8 @@ def play_game_agent_user():
                             # agent's turn
                             if (not game_over) and (not users_capture_move) and user_valid_move:
                                 # if game is not over and its not capture move by the player
-                                game_over, player = agent.play_agent(player)
-                                agents_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
-                                if agents_capture_move:
-                                    # if agents last move leads to capture, agent plays again
-                                    # since the player has changed alredy retain the same player
-                                    # player = game_logics.get_opponent_player(player)
-                                    game_over, player = agent.play_agent(player)
-                                    agents_capture_move = False  
+                                game_over, player = agent.play_random_agent(player)
                             
-                                
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
                             scrolling_offset = max_scroll
