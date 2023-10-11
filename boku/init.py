@@ -28,7 +28,7 @@ class BoardVariables():
                 "color": (10, 21, 23),
             }
         }
-
+        self.empty_space = -1
         self.TRAP_PATTERN = [
             [self.PLAYERS["p1"]["symbol"], self.PLAYERS["p2"]["symbol"], self.PLAYERS["p2"]["symbol"],self.PLAYERS["p1"]["symbol"]],
             [self.PLAYERS["p2"]["symbol"], self.PLAYERS["p1"]["symbol"], self.PLAYERS["p1"]["symbol"],self.PLAYERS["p2"]["symbol"]],
@@ -154,7 +154,7 @@ class BoardVariables():
         # HEX_GRID_FLAT_MAP
         # (0,q,r) -> player symbols
         # (1,q,r) -> mapping from flat_map to hex_info
-        self.HEX_GRID_FLAT_MAP = [[[-1 for r in range(0,10)] for q in range(0,11)],
+        self.HEX_GRID_FLAT_MAP = [[[self.empty_space if [q-5,r-4] in self.HEX_GRID_CORDS.values() else None for r in range(0,10)] for q in range(0,11)],
                             [[None for r in range(0,10)] for q in range(0,11)]]
 
 if __name__ == "__main__":

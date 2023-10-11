@@ -142,7 +142,7 @@ class Graphics():
         detected_capture_moves_np = np.array(detected_capture_moves)
         flat_capture_moves = detected_capture_moves_np.reshape(-1, detected_capture_moves_np.shape[-1])
         # get all the poins of interest from the
-        detected_hex_points = [self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][2:] for [shifted_q, shifted_r] in flat_capture_moves]
+        detected_hex_points = [self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][2:-1] for [shifted_q, shifted_r] in flat_capture_moves]
         for hex_points in detected_hex_points:
             # x_center, y_center = hex_points[1], hex_points[1]
             vertices = hex_points[2:]

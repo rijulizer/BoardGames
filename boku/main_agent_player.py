@@ -10,9 +10,9 @@ from init import BoardVariables
 from geometry import BoardGeometry
 from game_logics import GameLogics
 from graphics import Graphics
+from agents import Agent
 
-
-def play_game_multiuser_v2():
+def play_game_agent_user():
     """
     Player have to capture after a capture move
     """
@@ -20,6 +20,7 @@ def play_game_multiuser_v2():
     board_variables = BoardVariables()
     board_geometry = BoardGeometry(board_variables)
     game_logics = GameLogics(board_variables, board_geometry)
+    agent = Agent(board_variables, game_logics)
 
     # Initialize Pygame
     pygame.init()
@@ -39,7 +40,6 @@ def play_game_multiuser_v2():
     graphics = Graphics(screen, board_variables)
 
     player = "p1" # start with player p1
-    
     detected_traps = []
     # variables for history box
     text_line_space = 30
@@ -48,6 +48,8 @@ def play_game_multiuser_v2():
     scrolling_offset = 0
     game_over = False
     running = True
+    users_capture_move = False
+    agents_capture_move = False
     while running:
         # check for quit by user
         for event in pygame.event.get():
@@ -59,13 +61,17 @@ def play_game_multiuser_v2():
                     # find the hex that was clicked
                     clicked_hex_name = board_geometry.find_hex_center_near_mouse_click(mouse_x, mouse_y)
                     print("#"*30)
+                    print(f"[DEBUG]-[main]-mouse position- {mouse_x, mouse_y}, user_clicked_hex- {clicked_hex_name}")
+                    # print(f"""flat_pos- {(board_variables.HEX_GRID_CORDS[clicked_hex_name][0]+5, board_variables.HEX_GRID_CORDS[clicked_hex_name][1]+4)}""")
                     
-                    # Restart
+                    
+                    # restart
                     if graphics.is_point_inside_rect(mouse_x, mouse_y, restart_button_rect):
                         print("[DEBUG]-[main]-Restart button clicked")  # Perform restart action here
                         board_variables = BoardVariables()
                         board_geometry = BoardGeometry(board_variables)
                         game_logics = GameLogics(board_variables, board_geometry)
+                        agent = Agent(board_variables, game_logics)
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
                         game_over = False
@@ -84,16 +90,34 @@ def play_game_multiuser_v2():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
-                    
+        
                     # Game Steps
                     else: 
                         if clicked_hex_name and not(game_over): # if user actually clicks on a hex
+                            # if user has a capture move skips agents move : user gets 2 move in 2 clicks
+                            # if agent has a capture move agent moves again : agent gets 2 move in row
+                            # since for user it is two consecutive cliks thats why its a bit different logic
+                            # user's turn
+                            game_over, player, user_valid_move = game_logics.play_user(clicked_hex_name, player)
+                            users_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
+                            # print(f"[DEBUG]-[main]-[users turn] users_capture_move- {users_capture_move}, agents_capture_move-{agents_capture_move}")                          
                             
-                            game_over, player, _ = game_logics.play_user(clicked_hex_name, player)
+                            # agent's turn
+                            if (not game_over) and (not users_capture_move) and user_valid_move:
+                                # if game is not over and its not capture move by the player
+                                game_over, player = agent.play_agent(player)
+                                agents_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
+                                if agents_capture_move:
+                                    # if agents last move leads to capture, agent plays again
+                                    # since the player has changed alredy retain the same player
+                                    # player = game_logics.get_opponent_player(player)
+                                    game_over, player = agent.play_agent(player)
+                                    agents_capture_move = False  
+                            
+                                
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
                             scrolling_offset = max_scroll
-
                         else:
                             print("[DEBUG]-[main]-[clicked_hex_name]- Invalid Move!")
                             game_logics.history_text.append(f"Invalid Move!")
@@ -116,7 +140,7 @@ def play_game_multiuser_v2():
             # Draw board and player tokens
             # draw the hexagonal grid
             for hex_name, hex_points in board_variables.HEX_GRID_CORDS.items():
-                graphics.draw_hexagon(hex_points,hex_name)
+                graphics.draw_hexagon(hex_points, hex_name)
             
             # draw a player whenver player clicks on the board
             graphics.draw_player_tokens()
@@ -128,6 +152,7 @@ def play_game_multiuser_v2():
                 # in capture mode retain existing player 
                 # as player has been flipped , flip again
                 graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
+
             graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
         else: # game over
             screen.blit(game_over_text, (board_variables.WIDTH // 2 - 200, board_variables.HEIGHT // 2 - 100))
@@ -139,4 +164,19 @@ def play_game_multiuser_v2():
     sys.exit()
 
 if __name__=="__main__":
-    play_game_multiuser_v2()
+    play_game_agent_user()
+
+
+#  if not agents_capture_move:
+#     game_over, player = game_logics.play_user(clicked_hex_name, player)
+#     users_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
+#     agents_capture_move = False  
+#     print(f"[DEBUG]-[main]-[users turn] users_capture_move- {users_capture_move}, agents_capture_move-{agents_capture_move}")                          
+# # agent's turn
+# if (not game_over) and (not users_capture_move):
+#     # if game is not over and its not capture move by the player
+#     game_over, player = agent.play_agent(player)
+#     agents_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
+#     users_capture_move = False
+#     print(f"[DEBUG]-[main]-[agents turn] users_capture_move- {users_capture_move}, agents_capture_move-{agents_capture_move}")
+    

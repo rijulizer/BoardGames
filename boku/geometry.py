@@ -87,6 +87,8 @@ class BoardGeometry():
         
         hex_points = self.board_variable.HEX_GRID_CORDS[hex_name]
         q,r = hex_points[0], hex_points[1]
+        # if isinstance(q, str):
+        #     print("[DEBUG]-[flat_map_gird]- q,r -",q,r)
         shifted_q = q+5 # this shifts are due to the index shift in flat map
         shifted_r = r+4
         return (shifted_q, shifted_r)
@@ -103,16 +105,23 @@ class BoardGeometry():
             # add hex points to HEX_GRID_CORDS
             hex_points = cube_cords.copy()
             hex_points.extend(hex_cords)
-            self.board_variable.HEX_GRID_CORDS[hex_name] = hex_points
+            self.board_variable.HEX_GRID_CORDS[hex_name] = hex_points.copy()
+            hex_points.append(hex_name)
             # generated row-cols for flat_map
             (shifted_q, shifted_r) = self.flat_map_gird(hex_name)
             self.board_variable.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r] = hex_points
 
 if __name__ == "__main__":
     board_variables = BoardVariables()
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_CORDS after BoardVariables() \n")
+    pprint(board_variables.HEX_GRID_CORDS)
     print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
     pprint(board_variables.HEX_GRID_FLAT_MAP)
+
     board_geometry = BoardGeometry(board_variables)
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_CORDS after BoardGeometry() \n")
+    pprint(board_variables.HEX_GRID_CORDS)
+    
     print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardGeometry() \n")
     pprint(board_variables.HEX_GRID_FLAT_MAP)
     

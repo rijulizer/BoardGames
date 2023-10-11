@@ -16,8 +16,8 @@ class GameLogics():
         self.events_redo = []
         self.history_text = [f"Game starts!! Player-1 starts -"] # refresh history
         self.player_captured_last ={
-        'p1': None,
-        'p2': None,
+        'p1': [None,None],
+        'p2': [None,None],
         }
         self.detected_capture_moves = []
                         
@@ -29,7 +29,6 @@ class GameLogics():
             self,
             clicked_hex_name: str, 
             player: str, 
-            # player_captured_last: dict[str: tuple[int, int]],
         ) -> bool:
         """
         For a player check if the particular position is valid or not
@@ -39,11 +38,10 @@ class GameLogics():
         pos_in_map = self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
         
         # player was captured from this position in the last turn
-        self.player_captured_last[player]
         # print("[DEBUG]- [check_valid_move]- player_captured_last", player_captured_last)
         # check if the board is empty 
         # and check if the player was captured from that pos in the previous turn
-        if ((pos_in_map == -1) and ([shifted_q, shifted_r] != self.player_captured_last[player])): 
+        if ((pos_in_map == self.variables.empty_space) and ([shifted_q, shifted_r] != self.player_captured_last[player])): 
             return True
         return False
     
@@ -70,8 +68,8 @@ class GameLogics():
                 "detected_capture_moves": detected_capture_moves,
                 "flag_redo_ind": flag_redo}
             })
-        pprint("[DEBUG] - [EVENTS] - [make_move]- events added - \n")
-        pprint(self.events[-5:])
+        # pprint("[DEBUG] - [EVENTS] - [make_move]- events added - \n")
+        # pprint(self.events[-5:])
     
     def undo_move(self, pos: str, player: str):
         """
@@ -79,7 +77,7 @@ class GameLogics():
         """
         shifted_q, shifted_r = self.geometry.flat_map_gird(pos)
         # empty position
-        self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1
+        self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space
         # if the mode had lead to detect captured moves then empty that
         if len(self.detected_capture_moves) > 0:
             self.detected_capture_moves = [] 
@@ -175,8 +173,8 @@ class GameLogics():
             if event_type == "move":
                 # modify the detected captured moves 
                 self.events[-1][event_type]["detected_capture_moves"] = self.detected_capture_moves
-            pprint("[DEBUG] - [EVENTS] - [detect_capture_move]- event added - \n")
-            pprint(self.events[-5:])
+            # pprint("[DEBUG] - [EVENTS] - [detect_capture_move]- event added - \n")
+            # pprint(self.events[-5:])
 
     def check_click_capture_hex(
             self,
@@ -191,8 +189,7 @@ class GameLogics():
             if [shifted_q, shifted_r] in trap_window:
                 return True
         return False
-                
-        
+    
     def capture_move_v2(
             self,
             clicked_hex_name: str, 
@@ -207,9 +204,9 @@ class GameLogics():
         oppn_player = list(set(self.variables.PLAYERS.keys()) - set([player]))[0]
         # Since the player has already been switched so player holds the opponent player 
         removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-        self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1 # empty captured position
+        self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
         # add captured move to illegal psotions for the next move
-        self.player_captured_last[player] = [shifted_q,shifted_r]
+        self.player_captured_last[player] = [shifted_q, shifted_r]
 
         self.history_text.append(f"{oppn_player} - captures - {clicked_hex_name}")
         # add capture event
@@ -223,8 +220,8 @@ class GameLogics():
             "redo_flag_ind": True
             }
         })
-        pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
-        pprint(self.events[-5:])
+        # pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
+        # pprint(self.events[-5:])
     
     def capture_move(
             self,
@@ -242,7 +239,7 @@ class GameLogics():
         for trap_window in self.detected_capture_moves:
             if [shifted_q, shifted_r] in trap_window:
                 removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-                self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1 # empty captured position
+                self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
                 # add captured move to illegal psotions for the next move
                 self.player_captured_last[player] = [shifted_q,shifted_r]
 
@@ -258,18 +255,17 @@ class GameLogics():
                     "redo_flag_ind": True
                     }
                 })
-                pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
-                pprint(self.events[-5:])
+                # pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
+                # pprint(self.events[-5:])
             
-
-# print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
-# pprint(HEX_GRID_FLAT_MAP[0])
-# print("[DEBUG]- [capture_move]- player_captured_last", self.player_captured_last)
+        # print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
+        # pprint(HEX_GRID_FLAT_MAP[0])
+        # print("[DEBUG]- [capture_move]- player_captured_last", self.player_captured_last)
 
     def reset_last_captured(self):
         self.player_captured_last ={
-        'p1': None,
-        'p2': None,
+        'p1': [None,None],
+        'p2': [None,None],
         }
     
     def undo_events(self):
@@ -286,8 +282,8 @@ class GameLogics():
             hex_name = event[event_type]["hex_name"]
             # detected_capture_moves = event[event_type]["detected_capture_moves"]
             self.undo_move(hex_name, player)
-            pprint("[DEBUG] - [EVENTS] - [undo_make_move]- events added - \n")
-            pprint(self.events[-5:])
+            # pprint("[DEBUG] - [EVENTS] - [undo_make_move]- events added - \n")
+            # pprint(self.events[-5:])
             return player
         
         elif event_type == "capture":
@@ -306,12 +302,10 @@ class GameLogics():
             # undo illegal psotions for the next move
             self.player_captured_last[player] = []
 
-            pprint("[DEBUG] - [EVENTS] - [undo_capture_move]- events - \n")
-            pprint(self.events[-5:])
+            # pprint("[DEBUG] - [EVENTS] - [undo_capture_move]- events - \n")
+            # pprint(self.events[-5:])
             self.history_text.append(f"[Undo] - {player} - captures - {captured_hex}")
             return oppn_player
-
-
 
     def redo_events(self):
         """
@@ -341,7 +335,7 @@ class GameLogics():
             removed_symbol = event[event_type]["removed_symbol"]
             
             # put the token back on the grid
-            self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = -1 # empty captured position
+            self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
             # redo capture moves
             self.detected_capture_moves = []
             # redo captured move to illegal psotions for the next move
@@ -372,6 +366,7 @@ class GameLogics():
         if not(len(self.detected_capture_moves) > 0):
             # check if the move is vald or not
             if self.check_valid_move(clicked_hex_name, player):
+                flag_valid_move = True
                 # make move on the flat_board
                 self.make_move(clicked_hex_name, player)
                 # Check the board if game is over and get trap positions
@@ -394,15 +389,18 @@ class GameLogics():
                 
                 # switch player
                 player = self.get_opponent_player(player)
+                
             else:
+                flag_valid_move = False
                 print("[DEBUG]-[main]- [check_valid_move]- Invalid Move!")
                 self.history_text.append(f"Invalid Move!")
+                
 
         else: # game in capture flow
             print(f"[DEBUG]-[main]- game in - Capture Mode")
             # check if user is clicking on valid capture hex
             if (self.check_click_capture_hex(clicked_hex_name)):
-                
+                flag_valid_move = True
                 self.capture_move_v2(
                     clicked_hex_name, 
                     player,
@@ -413,7 +411,8 @@ class GameLogics():
                 # click anywhere else in the board to not capture
             else:
                 self.history_text.append(f"Invalid Move!, you have to capture.")
-        return game_over, player
+                flag_valid_move = False
+        return game_over, player, flag_valid_move
 
 
 if __name__ == "__main__":
