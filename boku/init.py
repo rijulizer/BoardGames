@@ -31,6 +31,7 @@ class BoardVariables():
             }
         }
         self.empty_space = -1
+        # preset trap patterns - [[0,1,1,0],[1,0,0,1]
         self.TRAP_PATTERN = [
             [self.PLAYERS["p1"]["symbol"], self.PLAYERS["p2"]["symbol"], self.PLAYERS["p2"]["symbol"],self.PLAYERS["p1"]["symbol"]],
             [self.PLAYERS["p2"]["symbol"], self.PLAYERS["p1"]["symbol"], self.PLAYERS["p1"]["symbol"],self.PLAYERS["p2"]["symbol"]],
@@ -158,19 +159,19 @@ class BoardVariables():
         # (1,q,r) -> mapping from flat_map to hex_info
         self.HEX_GRID_FLAT_MAP = [[[self.empty_space if [q-5,r-4] in self.HEX_GRID_CORDS.values() else None for r in range(0,10)] for q in range(0,11)],
                             [[None for r in range(0,10)] for q in range(0,11)]]
-        self.board_pos_values = {}
-        self.get_pos_values()
+        # self.board_pos_values = {}
+        # self.get_pos_values()
     
-    def get_pos_values(self):
-        """
-        assigns value to an empty board based on different codnitions
-        # 1. proximity to center
-        """
-        # proximity to center value, values range from 5 to 0 fromcenter to extreme outer hex
-        for key, val in self.HEX_GRID_CORDS.items():
-            q, r = val
-            s = -q -r
-            self.board_pos_values[key] = int(5 - np.max(np.abs(np.array([q,r,s]))))
+    # def get_pos_values(self):
+    #     """
+    #     assigns value to an empty board based on different codnitions
+    #     # 1. proximity to center
+    #     """
+    #     # proximity to center value, values range from 5 to 0 fromcenter to extreme outer hex
+    #     for key, val in self.HEX_GRID_CORDS.items():
+    #         q, r = val
+    #         s = -q -r
+    #         self.board_pos_values[key] = int(5 - np.max(np.abs(np.array([q,r,s]))))
 
 
 if __name__ == "__main__":

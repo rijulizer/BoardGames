@@ -32,10 +32,6 @@ def play_game_multiuser_v2():
     restart_button_rect = pygame.Rect(900, 40, 150, 50)  # Define the restart button's position and size
     undo_button_rect = pygame.Rect(850, 100, 30, 30)
     redo_button_rect = pygame.Rect(1070, 100, 30, 30)
-    # Create a font for text
-    game_over_font = pygame.font.Font(None, 60)   
-    game_over_text = game_over_font.render("Game Over", True, (0,0,0))
-    
     graphics = Graphics(screen, board_variables)
 
     player = "p1" # start with player p1
@@ -54,6 +50,11 @@ def play_game_multiuser_v2():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:  # Scroll up
+                    scrolling_offset = max(0, scrolling_offset - 20)
+                elif event.button == 5:  # Scroll down
+                    scrolling_offset = min(max_scroll, scrolling_offset + 20)
+
                 if event.button ==1:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     # find the hex that was clicked
@@ -97,10 +98,7 @@ def play_game_multiuser_v2():
                         else:
                             print("[DEBUG]-[main]-[clicked_hex_name]- Invalid Move!")
                             game_logics.history_text.append(f"Invalid Move!")
-                if event.button == 4:  # Scroll up
-                    scrolling_offset = max(0, scrolling_offset - 20)
-                elif event.button == 5:  # Scroll down
-                    scrolling_offset = min(max_scroll, scrolling_offset + 20)
+                
 
         # display blank screen
         screen.fill(board_variables.BG_COLOR)
@@ -130,6 +128,11 @@ def play_game_multiuser_v2():
                 graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
             graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
         else: # game over
+            # Create a font for text
+            game_over_font = pygame.font.Font(None, 60)
+            # as always a move leads to win and move changes player, to get the player reverse again
+            oppn_player = game_logics.get_opponent_player(player)
+            game_over_text = game_over_font.render(f"Game Over!!,\n {oppn_player} is winner.", True, (0,0,0))        
             screen.blit(game_over_text, (board_variables.WIDTH // 2 - 200, board_variables.HEIGHT // 2 - 100))
         pygame.display.flip()
         clock.tick(60)

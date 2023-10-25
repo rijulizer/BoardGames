@@ -35,7 +35,7 @@ function minimax_ab(position, depth, alpha, beta, maximizingPlayer)
             if beta <= alpha
                 break
         return maxEval
-    if
+    else
     minEval = +infinity
     for each child of position
         eval  = minimax_ab(child, depth-1, alpha, beta, True)

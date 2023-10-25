@@ -1,11 +1,7 @@
 import math
 import numpy as np
 from pprint import pprint
-# (WIDTH, HEIGHT, HEX_SIZE, BG_COLOR, 
-#                   HEX_COLOR, HEX_WIDTH, FONT_SIZE, LABEL_COLOR, 
-#                   boku_rule_cont_pos, PLAYERS, HEX_GRID_CORDS, 
-#                   HEX_GRID_FLAT_MAP, TRAP_PATTERN
-# ) 
+
 from init import BoardVariables
 
 class BoardGeometry():
@@ -80,7 +76,7 @@ class BoardGeometry():
 
         return nearest_hex 
 
-    def flat_map_gird(self, hex_name: str):
+    def get_flat_map_gird(self, hex_name: str):
         """
         returns row and column index of flat_grid_map from hex_name
         """
@@ -108,7 +104,7 @@ class BoardGeometry():
             self.board_variable.HEX_GRID_CORDS[hex_name] = hex_points.copy()
             hex_points.append(hex_name)
             # generated row-cols for flat_map
-            (shifted_q, shifted_r) = self.flat_map_gird(hex_name)
+            (shifted_q, shifted_r) = self.get_flat_map_gird(hex_name)
             self.board_variable.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r] = hex_points
 
 if __name__ == "__main__":
