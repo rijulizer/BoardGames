@@ -2,8 +2,9 @@ import sys
 import numpy as np
 from pprint import pprint
 import time
-from copy import copy, deepcopy
+import copy
 from tqdm import tqdm
+# import cProfile
 
 from init import BoardVariables
 from geometry import BoardGeometry
@@ -162,25 +163,68 @@ class AgentMiniMax(Agent):
         Save the game states before minimax starts
         """
         # save a copy of different game states
-        self.state_board = self.variables.HEX_GRID_FLAT_MAP[0].copy() # pass a copy of the board
+        self.state_board = copy.deepcopy(self.variables.HEX_GRID_FLAT_MAP[0]) # pass a copy of the board
         self.state_player = player
-        self.state_last_captured = self.game_logics.player_captured_last
-        self.state_history_text = self.game_logics.history_text.copy()
-        self.state_events = self.game_logics.events.copy()
-        self.state_events_redo = self.game_logics.events_redo.copy()
+        self.state_last_captured = copy.deepcopy(self.game_logics.player_captured_last)
+        self.state_history_text = copy.deepcopy(self.game_logics.history_text)
+        self.state_events = copy.deepcopy(self.game_logics.events)
+        self.state_events_redo = copy.deepcopy(self.game_logics.events_redo)
     
     def trasfer_prev_game_states(self):
         """
         Trasfer back the saved game states after minimax
         """
         # save a copy of different game states
-        self.variables.HEX_GRID_FLAT_MAP[0] = self.state_board.copy() # pass a copy of the board
+        self.variables.HEX_GRID_FLAT_MAP[0] = copy.deepcopy(self.state_board) # pass a copy of the board
         player = self.state_player
-        self.game_logics.player_captured_last = self.state_last_captured.copy()
-        self.game_logics.history_text = self.state_history_text.copy()
-        self.game_logics.events  =self.state_events.copy()
-        self.game_logics.events_redo = self.state_events_redo.copy()
+        self.game_logics.player_captured_last = copy.deepcopy(self.state_last_captured)
+        self.game_logics.history_text = copy.deepcopy(self.state_history_text)
+        self.game_logics.events = copy.deepcopy(self.state_events)
+        self.game_logics.events_redo = copy.deepcopy(self.state_events_redo)
         return player
+    
+    def get_token_count_diff(self, player):
+        """
+        counts the differnece of number of players in the board
+        """
+        oppn_player = self.game_logics.get_opponent_player(player)
+        player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
+                  == self.variables.PLAYERS[player]["symbol"])
+        oppn_player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
+                  == self.variables.PLAYERS[oppn_player]["symbol"])
+        # count diff values are like - +1, +2, -1, -2 
+        # more the count_differnece better the value
+        count_diff =  int(player_count - oppn_player_count)
+        return count_diff
+    
+    def get_pos_values(self, player):
+        """
+        assigns value to an empty board based on different codnitions
+        # 1. proximity to center
+        """
+        # proximity to center value, values range from 5 to 0 fromcenter to extreme outer hex
+        pos_value = 0
+        rows, cols = np.array(self.variables.HEX_GRID_FLAT_MAP[0]).shape[0], np.array(self.variables.HEX_GRID_FLAT_MAP[0][0]).shape[0] 
+        for row in range(rows):
+            for col in range(cols):
+                if self.variables.HEX_GRID_FLAT_MAP[0][row][col] == self.variables.PLAYERS[player]['symbol']:
+                    q, r = row-5, col-4 # map to cube-cord q,r
+                    s = -q -r
+                    pos_value += int(5 - np.max(np.abs(np.array([q,r,s]))))
+        return pos_value
+
+    def static_eval(self, player):
+        """
+        Static evaluation function -
+        Input: has access to board state, player 
+        Features: 1. differnce of count of tokens of the two players
+                  2. Position Value, how close to the center the position is
+                  3. how many capture move a certain move leads to.
+        Return: Integer value
+        """
+        
+        pos_value = self.get_pos_values(player)
+        return pos_value
     
     def agent_make_move(self, clicked_hex_name, player):
         """
@@ -223,14 +267,16 @@ class AgentMiniMax(Agent):
             
     
         return game_over, oppn_player    
-
-    def minimax_ab(self, select_hex_name: str, player: str, depth: int, alpha: int, beta: int) -> int:
+    
+    def minimax_ab(self, player: str, depth: int, alpha: int, beta: int) -> int:
         """
         Always -> MAX -p1, MIN -p2
         """
         # Check the board if game is over and get trap positions
         game_over, _ =  self.game_logics.check_board(player)
         if game_over:
+            # when game is over and depth is <= zero it should not change the player anymore
+            player = self.game_logics.get_opponent_player(player)
             # print(f"\n[Debug]-depth- {depth}, finsihed")# max_player- score: {score}, max_score :{max_score}")
             # print("\n[Debug]-depth- {depth}, min_player- score: {score}, min_score :{min_score}")
             if player == 'p1':
@@ -240,14 +286,16 @@ class AgentMiniMax(Agent):
             else:
                 # draw scenario
                 return 0, player
-        if depth == 0:
+        if depth <= 0:
+            player = self.game_logics.get_opponent_player(player)
+            print(f"[DEBUG]-[minimax]-depth==0: input_player: {player}, abs(score): {self.static_eval(player)}")
             # return value functions
             if player == 'p1':
-                return self.variables.board_pos_values[select_hex_name], _
+                return self.static_eval(player), _
             else:
-                return -(self.variables.board_pos_values[select_hex_name]), _
-            
+                return -(self.static_eval(player)), _
         
+        # generate available moves of the player
         avilable_moves = self.get_valid_moves(player)
         if player == 'p1':
             max_score = -np.inf
@@ -257,7 +305,7 @@ class AgentMiniMax(Agent):
                 # get the eqivalent hex name
                 select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
                 game_over, oppn_player = self.agent_make_move(select_hex_name, player)
-                score, _ = self.minimax_ab(select_hex_name, oppn_player, depth-1, alpha, beta)
+                score, _ = self.minimax_ab(oppn_player, depth-1, alpha, beta)
                 # undo move
                 player = self.game_logics.undo_events()
                 max_score = max(score, max_score)
@@ -274,7 +322,7 @@ class AgentMiniMax(Agent):
                 # get the eqivalent hex name
                 select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
                 game_over, oppn_player = self.agent_make_move(select_hex_name, player)
-                score, _ = self.minimax_ab(select_hex_name, oppn_player, depth-1, alpha, beta)
+                score, _ = self.minimax_ab(oppn_player, depth-1, alpha, beta)
                 # undo move
                 player = self.game_logics.undo_events()
                 min_score = min(score, min_score)
@@ -290,53 +338,33 @@ class AgentMiniMax(Agent):
         Agent - 2nd player
         """
         # agent player
-        game_over = False # default declaration
-        # generate valid moves before each move
+        # generate all valid moves before each move
         avilable_moves = self.get_valid_moves(player)
         min_score = + np.inf
-        # self.game_logics.flag_track = False
         # print(f"[DEBUG]-[play_agent]- searching {len(avilable_moves)} available moves")
+        # copy game states before changes are made during the search
+        self.copy_game_states(player)
         # iterate through all available moves
         for move_index in tqdm(range(avilable_moves.shape[0])):
             shifted_q, shifted_r = avilable_moves[move_index]
             # get the eqivalent hex name
             select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
-            self.copy_game_states(player)
             # search best move
-            score, _ = self.minimax_ab(select_hex_name, player, depth, alpha = -np.inf, beta = np.inf,)
+            game_over, oppn_player = self.agent_make_move(select_hex_name, player)
+            score, _ = self.minimax_ab(oppn_player, depth-1, - np.inf, + np.inf)    
             if score < min_score:
                 min_score = score
                 best_hex = select_hex_name
+            # undo move
+            player = self.game_logics.undo_events()
+        print(f"[Debug]-[play_agent]-best_move: {best_hex}, score: {score}, min_score: {min_score}")    
+        # trasnfer back copied game states to games_logics object
         player = self.trasfer_prev_game_states()
         # make the final move, if the move leads to capture it will capture
         game_over, oppn_player  = self.agent_make_move(best_hex, player)
         return game_over, oppn_player
     
                 
-    # def get_token_count_diff(self, player):
-    #     """
-    #     counts the differnece of number of players in the board
-    #     """
-    #     oppn_player = self.game_logics.get_opponent_player(player)
-    #     player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
-    #               == self.variables.PLAYERS[player]["symbol"])
-    #     oppn_player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
-    #               == self.variables.PLAYERS[oppn_player]["symbol"])
-    #     # count diff values are like - +1, +2, -1, -2 
-    #     # more the count_differnece better the value
-    #     count_diff =  int(player_count - oppn_player_count)
-    #     return count_diff
-
-    # def static_eval(self, player):
-    #     """
-    #     Static evaluation function - 
-    #     Features: 1. differnce of count of tokens of the two players
-    #               2. Position Value, how close to the center the position is
-    #               3. how many capture move a certain move leads to.
-    #     """
-    #     hex_name = None
-    #     token_count_diff = self.get_token_count_diff(player)
-    #     pos_value = self.variables.board_pos_values[hex_name]
     
     # def place_token(self, board, pos, player):
     #     """

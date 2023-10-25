@@ -29,8 +29,10 @@ class GameLogics():
         # This is faster
         if player == "p1":
             return "p2"
-        else:
+        elif player == "p2":
             return "p1"
+        else:
+            raise ValueError("player should be in - ['p1','p2']")
 
     def check_valid_move(
             self,
@@ -379,11 +381,14 @@ class GameLogics():
         Normal Flow: checks if move is valid, Places token in board, checks game over, detects capture moves
             Returns: game_over flag and opponent player, flag_valid_move
         Capture Flow: checks if capture move is valid, Places token in board, checks game over, detects capture moves
+            Input: in capture flow input player holds opponent player
+            Returns: game_over flag and same player, flag_valid_move
         """
         game_over = False # default declaration
-            
+        
         # normal flow of game (capture not detected)
         if not(len(self.detected_capture_moves) > 0):
+            print(f"[DEBUG]-[play_user]- game in - Normal Flow!!")
             # check if the move is vald or not
             if self.check_valid_move(clicked_hex_name, player):
                 flag_valid_move = True
@@ -404,7 +409,7 @@ class GameLogics():
                 # in normal move, refresh any illegal move due to capture in prev turn
                 self.reset_last_captured()
                 if game_over:
-                    print(f"[DEBUG]-[play_game_multiuser]-game over winner- {player}")
+                    print(f"[DEBUG]-[play_user]-game over winner- {player}")
                     self.history_text.append(f"[Game Over] Winner is - {player} !!")
                     # break
                 
@@ -413,12 +418,12 @@ class GameLogics():
                 
             else:
                 flag_valid_move = False
-                print("[DEBUG]-[main]- [check_valid_move]- Invalid Move!")
+                print("[DEBUG]-[play_user]- [check_valid_move]- Invalid Move!")
                 self.history_text.append(f"Invalid Move!")
                 
 
         else: # game in capture flow
-            print(f"[DEBUG]-[main]- game in - Capture Mode")
+            print(f"[DEBUG]-[play_user]- game in - Capture Mode")
             # check if user is clicking on valid capture hex
             if (self.check_click_capture_hex(clicked_hex_name)):
                 flag_valid_move = True
@@ -428,7 +433,7 @@ class GameLogics():
                     )
                 # empty the detected capture moves so that each turn it will check 
                 self.detected_capture_moves = []
-                print(f"[DEBUG]-[main]- Exiting - Capture Mode")
+                print(f"[DEBUG]-[play_user]- Exiting - Capture Mode")
             else:
                 self.history_text.append(f"Invalid Move!, you have to capture.")
                 flag_valid_move = False

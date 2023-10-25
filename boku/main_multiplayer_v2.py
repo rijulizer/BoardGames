@@ -50,11 +50,6 @@ def play_game_multiuser_v2():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:  # Scroll up
-                    scrolling_offset = max(0, scrolling_offset - 20)
-                elif event.button == 5:  # Scroll down
-                    scrolling_offset = min(max_scroll, scrolling_offset + 20)
-
                 if event.button ==1:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     # find the hex that was clicked
@@ -70,6 +65,9 @@ def play_game_multiuser_v2():
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
                         game_over = False
+                        # Calculate the maximum scrolling range
+                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                        scrolling_offset = max_scroll
                         
                     # Undo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, undo_button_rect):
@@ -78,6 +76,9 @@ def play_game_multiuser_v2():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to undo...")
                             game_logics.history_text.append(f"No events to undo.")
+                            # Calculate the maximum scrolling range
+                            max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                            scrolling_offset = max_scroll
                     # Redo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, redo_button_rect):
                         if len(game_logics.events_redo) > 0:
@@ -85,6 +86,9 @@ def play_game_multiuser_v2():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
+                            # Calculate the maximum scrolling range
+                            max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                            scrolling_offset = max_scroll
                     
                     # Game Steps
                     else: 
@@ -98,7 +102,11 @@ def play_game_multiuser_v2():
                         else:
                             print("[DEBUG]-[main]-[clicked_hex_name]- Invalid Move!")
                             game_logics.history_text.append(f"Invalid Move!")
-                
+                if event.button == 4:  # Scroll up
+                    scrolling_offset = max(0, scrolling_offset - 20)
+                elif event.button == 5:  # Scroll down
+                    scrolling_offset = min(max_scroll, scrolling_offset + 20)
+
 
         # display blank screen
         screen.fill(board_variables.BG_COLOR)
