@@ -1,0 +1,25 @@
+[Debug]-[play_agent]-best_hex: D4, last_score: 9, min_score: -3
+[DEBUG]-[play_agent]-[best_events]- last 5 events-
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F7',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'E6',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'G7',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'E5',
+           'player_turn': 'p1'}},
+ {'move': {'best_capture_hex': 'F6',
+           'best_capture_hex_cords': [5, 4],
+           'detected_capture_moves': [[[5, 4], [5, 5]]],
+           'flag_redo_ind': False,
+           'hex_name': 'D4',
+           'player_turn': 'p2'}}]

@@ -1,0 +1,644 @@
+pygame-ce 2.3.2 (SDL 2.26.5, Python 3.11.5)
+pygame-menu 4.4.3
+[DEBUG]- Initiating Board Variables...
+[DEBUG]- Initiating Board Geometry...
+[DEBUG]- Initiating Game Logics...
+[DEBUG]- Initiating Graphics...
+##############################
+[DEBUG]-[main]-mouse position- (407, 362), user_clicked_hex- F6
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[Debug]-[play_agent]-avilable_moves len:79
+[Debug]-[play_agent]-player: p2, select_hex_name: E10
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: D9
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: C8
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: B7
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: A6
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: F10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: E9
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: D8
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: C7
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: B6
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: A5
+score: 9, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: G10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: F9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: E8
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: D7
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: C6
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: B5
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: A4
+score: 9, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: H10
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: G9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: F8
+score: 6, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: E7
+score: 6, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D6
+score: 6, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: C5
+score: 7, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: B4
+score: 8, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: A3
+score: 9, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: I10
+score: 8, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: H9
+score: 7, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: G8
+score: 6, min_hex: F8, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: F7
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E6
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D5
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C4
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B3
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: A2
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J10
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I9
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H8
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G7
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E5
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D4
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C3
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B2
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: A1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J9
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I8
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H7
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G6
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F5
+score: 5, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E4
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D3
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C2
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J8
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I7
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H6
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G5
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F4
+score: 6, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E3
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D2
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J7
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I6
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H5
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G4
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F3
+score: 7, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E2
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J6
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I5
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H4
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G3
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F2
+score: 8, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J5
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I4
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H3
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G2
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F1
+score: 9, min_hex: F7, min_score: 5
+[Debug]-[play_agent]-best_hex: F7, last_score: 9, min_score: 5
+##############################
+[DEBUG]-[main]-mouse position- (352, 378), user_clicked_hex- E6
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[Debug]-[play_agent]-avilable_moves len:77
+[Debug]-[play_agent]-player: p2, select_hex_name: E10
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: D9
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: C8
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: B7
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: A6
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: F10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: E9
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: D8
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: C7
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: B6
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: A5
+score: 9, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: G10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: F9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: E8
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: D7
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: C6
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: B5
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: A4
+score: 9, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: H10
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: G9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: F8
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: E7
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D6
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: C5
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: B4
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: A3
+score: 9, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: I10
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: H9
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: G8
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D5
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: C4
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: B3
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: A2
+score: 9, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: J10
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: I9
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: H8
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: G7
+score: 5, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E5
+score: 5, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D4
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C3
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B2
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: A1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J9
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I8
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H7
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G6
+score: 5, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F5
+score: 5, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E4
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D3
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C2
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J8
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I7
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H6
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G5
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F4
+score: 6, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E3
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D2
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J7
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I6
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H5
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G4
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F3
+score: 7, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E2
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J6
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I5
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H4
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G3
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F2
+score: 8, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: E1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: J5
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: I4
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: H3
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: G2
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F1
+score: 9, min_hex: G7, min_score: 5
+[Debug]-[play_agent]-best_hex: G7, last_score: 9, min_score: 5
+##############################
+[DEBUG]-[main]-mouse position- (396, 411), user_clicked_hex- E5
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[Debug]-[play_agent]-avilable_moves len:75
+[Debug]-[play_agent]-player: p2, select_hex_name: E10
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: D9
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: C8
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: B7
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: A6
+score: 9, min_hex: E10, min_score: 9
+[Debug]-[play_agent]-player: p2, select_hex_name: F10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: E9
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: D8
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: C7
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: B6
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: A5
+score: 9, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: G10
+score: 8, min_hex: F10, min_score: 8
+[Debug]-[play_agent]-player: p2, select_hex_name: F9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: E8
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: D7
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: C6
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: B5
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: A4
+score: 9, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: H10
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: G9
+score: 7, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: F8
+score: 8, min_hex: F9, min_score: 7
+[Debug]-[play_agent]-player: p2, select_hex_name: E7
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D6
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: C5
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: B4
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: A3
+score: 9, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: I10
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: H9
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: G8
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D5
+score: 6, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: C4
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: B3
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: A2
+score: 9, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: J10
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: I9
+score: 7, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: H8
+score: 8, min_hex: E7, min_score: 6
+[Debug]-[play_agent]-player: p2, select_hex_name: D4
+score: -3, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: C3
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: B2
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: A1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: J9
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: I8
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: H7
+score: 6, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: G6
+score: 5, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: F5
+score: 5, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: E4
+score: 6, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: D3
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: C2
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: B1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: J8
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: I7
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: H6
+score: 6, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: G5
+score: 6, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: F4
+score: 6, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: E3
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: D2
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: C1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: J7
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: I6
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: H5
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: G4
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: F3
+score: 7, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: E2
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: D1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: J6
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: I5
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: H4
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: G3
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: F2
+score: 8, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: E1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: J5
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: I4
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: H3
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: G2
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-player: p2, select_hex_name: F1
+score: 9, min_hex: D4, min_score: -3
+[Debug]-[play_agent]-best_hex: D4, last_score: 9, min_score: -3
+##############################
+[DEBUG]-[main]-mouse position- (458, 454), user_clicked_hex- E4
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[Debug]-[play_agent]-avilable_moves len:74
+[Debug]-[play_agent]-player: p2, select_hex_name: E10
+score: 5, min_hex: E10, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: D9
+score: 5, min_hex: E10, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: C8
+score: 5, min_hex: E10, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: B7
+score: 5, min_hex: E10, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: A6
+score: 5, min_hex: E10, min_score: 5
+[Debug]-[play_agent]-player: p2, select_hex_name: F10
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: E9
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: D8
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: C7
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: B6
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: A5
+score: 5, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: G10
+score: 4, min_hex: F10, min_score: 4
+[Debug]-[play_agent]-player: p2, select_hex_name: F9
+score: 3, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: E8
+score: 3, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: D7
+score: 3, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: C6
+score: 3, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: B5
+score: 4, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: A4
+score: 5, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: H10
+score: 4, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: G9
+score: 3, min_hex: F9, min_score: 3
+[Debug]-[play_agent]-player: p2, select_hex_name: F8
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: E7
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: D6
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: C5
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: B4
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: A3
+score: 5, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: I10
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: H9
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: G8
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: D5
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: C4
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: B3
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: A2
+score: 5, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: J10
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: I9
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: H8
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: F6
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: C3
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: B2
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: A1
+score: 5, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: J9
+score: 4, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: I8
+score: 3, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: H7
+score: 2, min_hex: F8, min_score: 2
+[Debug]-[play_agent]-player: p2, select_hex_name: G6
+score: 1, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: F5
+score: 1, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: D3
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: C2
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: B1
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: J8
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: I7
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: H6
+score: 2, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: G5
+score: 2, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: F4
+score: 2, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: E3
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: D2
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: C1
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: J7
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: I6
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: H5
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: G4
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: F3
+score: 3, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: E2
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: D1
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: J6
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: I5
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: H4
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: G3
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: F2
+score: 4, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: E1
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: J5
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: I4
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: H3
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: G2
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-player: p2, select_hex_name: F1
+score: 5, min_hex: G6, min_score: 1
+[Debug]-[play_agent]-best_hex: G6, last_score: 5, min_score: 1

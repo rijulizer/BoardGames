@@ -237,8 +237,8 @@ class GameLogics():
                 "redo_flag_ind": True
                 }
             })
-            pprint("[DEBUG] - [EVENTS] - [capture_move]- last 5 events added - \n")
-            pprint(self.events[-5:])
+            pprint("[DEBUG]-[game_logics]-[capture_move]- last 3 events- \n")
+            pprint(self.events[-3:])
     
     # def capture_move(
     #         self,

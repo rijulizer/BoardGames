@@ -1,0 +1,220 @@
+pygame-ce 2.3.2 (SDL 2.26.5, Python 3.11.5)
+pygame-menu 4.4.3
+[DEBUG]- Initiating Board Variables...
+[DEBUG]- Initiating Board Geometry...
+[DEBUG]- Initiating Game Logics...
+[DEBUG]- Initiating Graphics...
+##############################
+[DEBUG]-[main]-mouse position- (412, 339), user_clicked_hex- F6
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[Debug]-[play_agent]-best_hex: F7, last_score: 9, min_score: 5
+##############################
+[DEBUG]-[main]-mouse position- (360, 375), user_clicked_hex- E6
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[3, 4], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F8',
+              'captured_hex_flat_cords': [3, 4],
+              'detected_capture_moves': [[[3, 4], [4, 4]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[3, 4], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F7',
+              'captured_hex_flat_cords': [4, 4],
+              'detected_capture_moves': [[[3, 4], [4, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'G8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[4, 3], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'H9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'G8',
+              'captured_hex_flat_cords': [4, 3],
+              'detected_capture_moves': [[[4, 3], [4, 4]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'G8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[4, 3], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'H9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F7',
+              'captured_hex_flat_cords': [4, 4],
+              'detected_capture_moves': [[[4, 3], [4, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[Debug]-[play_agent]-best_hex: G7, last_score: 9, min_score: 5
+##############################
+[DEBUG]-[main]-mouse position- (414, 415), user_clicked_hex- E5
+[DEBUG]-[main]-Players turn - p1
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[main]-Agents turn -  p2
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[3, 4], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F8',
+              'captured_hex_flat_cords': [3, 4],
+              'detected_capture_moves': [[[3, 4], [4, 4]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[3, 4], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F7',
+              'captured_hex_flat_cords': [4, 4],
+              'detected_capture_moves': [[[3, 4], [4, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'G8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[4, 3], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'H9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'G8',
+              'captured_hex_flat_cords': [4, 3],
+              'detected_capture_moves': [[[4, 3], [4, 4]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'G8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[4, 3], [4, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'H9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'F7',
+              'captured_hex_flat_cords': [4, 4],
+              'detected_capture_moves': [[[4, 3], [4, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'H8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[5, 2], [5, 3]]],
+           'flag_redo_ind': False,
+           'hex_name': 'I9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'H8',
+              'captured_hex_flat_cords': [5, 2],
+              'detected_capture_moves': [[[5, 2], [5, 3]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'H8',
+           'player_turn': 'p2'}},
+ {'move': {'detected_capture_moves': [[[5, 2], [5, 3]]],
+           'flag_redo_ind': False,
+           'hex_name': 'I9',
+           'player_turn': 'p1'}},
+ {'capture': {'captured_hex': 'G7',
+              'captured_hex_flat_cords': [5, 3],
+              'detected_capture_moves': [[[5, 2], [5, 3]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 0}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+@@@@@@@@@@@@@@@@@@@@@@@@@ Interesting @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# This is where the p2 capture taking place
+
+
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'E5',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [[[5, 4], [5, 5]]],
+           'flag_redo_ind': False,
+           'hex_name': 'D4',
+           'player_turn': 'p2'}},
+ {'capture': {'captured_hex': 'F6',
+              'captured_hex_flat_cords': [5, 4],
+              'detected_capture_moves': [[[5, 4], [5, 5]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 1}}]
+[DEBUG]-[agents]-[capture_move]- last 3 events- 
+
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'E5',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [[[5, 4], [5, 5]]],
+           'flag_redo_ind': False,
+           'hex_name': 'D4',
+           'player_turn': 'p2'}},
+ {'capture': {'captured_hex': 'E5',
+              'captured_hex_flat_cords': [5, 5],
+              'detected_capture_moves': [[[5, 4], [5, 5]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 1}}]
+[Debug]-[play_agent]-best_hex: D4, last_score: 9, min_score: -3

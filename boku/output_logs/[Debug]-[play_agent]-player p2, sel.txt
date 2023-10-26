@@ -1,0 +1,55 @@
+[Debug]-[play_agent]-player: p2, select_hex_name: G5, score: 2, min_hex: F8, min_score: 2
+
+'[DEBUG]-[game_logics]-[capture_move]- last 3 events- \n'
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F5',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [[[5, 4], [6, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F4',
+           'player_turn': 'p2'}},
+ {'capture': {'captured_hex': 'F5',
+              'captured_hex_flat_cords': [6, 4],
+              'detected_capture_moves': [[[5, 4], [6, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 1}}]
+
+
+
+[Debug]-[play_agent]-player: p2, select_hex_name: F4, score: -2, min_hex: F4, min_score: -2
+'[DEBUG]-[game_logics]-[capture_move]- last 3 events- \n'
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F5',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [[[5, 4], [6, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F4',
+           'player_turn': 'p2'}},
+ {'capture': {'captured_hex': 'F6',
+              'captured_hex_flat_cords': [5, 4],
+              'detected_capture_moves': [[[5, 4], [6, 4]]],
+              'player_turn': 'p1',
+              'redo_flag_ind': True,
+              'removed_symbol': 1}}]
+
+
+
+[Debug]-[play_agent]-player: p1, select_hex_name: E3, score: -3, min_hex: E3, min_score: -3
+'[DEBUG]-[game_logics]-[capture_move]- last 3 events- \n'
+[{'move': {'detected_capture_moves': [],
+           'flag_redo_ind': False,
+           'hex_name': 'F5',
+           'player_turn': 'p1'}},
+ {'move': {'detected_capture_moves': [[[5, 4], [6, 4]]],
+           'flag_redo_ind': False,
+           'hex_name': 'F4',
+           'player_turn': 'p2'}},
+ {'capture': {'captured_hex': 'F5',
+              'captured_hex_flat_cords': [6, 4],
+              'detected_capture_moves': [[[5, 4], [6, 4]]],
+              'player_turn': 'p2',
+              'redo_flag_ind': True,
+              'removed_symbol': 1}}]
