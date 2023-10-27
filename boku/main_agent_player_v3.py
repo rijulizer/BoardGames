@@ -117,7 +117,7 @@ def play_game_agent_user():
                                 print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
                                 # game_over, player = agent.play_random_agent(player)
-                                game_over, player = agent_2.play_agent(player, depth=1)
+                                game_over, player = agent_2.play_agent(player, depth=2)
                             
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
@@ -150,12 +150,12 @@ def play_game_agent_user():
             graphics.draw_player_tokens()
             
             # indicate player turn
-            graphics.draw_circle([(800,70), player])
+            graphics.draw_circle((800,70), player)
             if len(game_logics.detected_capture_moves) >0:
                 graphics.highlight_capture_moves(game_logics.detected_capture_moves)
                 # in capture mode retain existing player 
                 # as player has been flipped , flip again
-                graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
+                graphics.draw_circle((800,70), game_logics.get_opponent_player(player))
 
             graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
         else: # game over

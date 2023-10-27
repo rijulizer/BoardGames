@@ -240,45 +240,6 @@ class GameLogics():
             pprint("[DEBUG]-[game_logics]-[capture_move]- last 3 events- \n")
             pprint(self.events[-3:])
     
-    # def capture_move(
-    #         self,
-    #         clicked_hex_name: str, 
-    #         player: str,
-    #         ):
-    #     """
-    #     May or may not capture logic
-    #     """
-        
-    #     shifted_q, shifted_r = self.geometry.flat_map_gird(clicked_hex_name)
-    #     # pos_in_flatmap = HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-    #     oppn_player = list(set(self.variables.PLAYERS.keys()) - set([player]))[0]
-    #     # Since the player has already been switched so player holds the opponent player 
-    #     for trap_window in self.detected_capture_moves:
-    #         if [shifted_q, shifted_r] in trap_window:
-    #             removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
-    #             self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
-    #             # add captured move to illegal psotions for the next move
-    #             self.player_captured_last[player] = [shifted_q,shifted_r]
-
-    #             self.history_text.append(f"{oppn_player} - captures - {clicked_hex_name}")
-    #             # add capture event
-    #             self.events.append({
-    #             "capture":{
-    #                 "captured_hex": clicked_hex_name,
-    #                 "player_turn": oppn_player,
-    #                 "detected_capture_moves": self.detected_capture_moves,
-    #                 "captured_hex_flat_cords": [shifted_q, shifted_r],
-    #                 "removed_symbol":  removed_symbol,
-    #                 "redo_flag_ind": True
-    #                 }
-    #             })
-    #             # pprint("[DEBUG] - [EVENTS] - [capture_move]- event added - \n")
-    #             # pprint(self.events[-5:])
-            
-    #     # print("[DEBUG]- [capture_move]- HEX_GRID_FLAT_MAP[0]\n")
-    #     # pprint(HEX_GRID_FLAT_MAP[0])
-    #     # print("[DEBUG]- [capture_move]- player_captured_last", self.player_captured_last)
-
     def reset_last_captured(self):
         self.player_captured_last ={
         'p1': [None,None],
@@ -395,11 +356,12 @@ class GameLogics():
                 # make move on the flat_board
                 self.make_move(clicked_hex_name, player)
                 # Check the board if game is over and get trap positions
-                game_over, detected_traps =  self.check_board(player)
+                # game_over, detected_traps =  self.check_board(player)
+                game_over =  self.check_game_over(player, clicked_hex_name)
                 
                 # check if current move can lead to a capture
                 # for inital few turns- detected_traps=[], detected_capture_moves=[]
-                self.detect_capture_move(clicked_hex_name, detected_traps)
+                self.get_capture_moves(player, clicked_hex_name)
                 
                 # if (len(self.detected_capture_moves) > 0): # debugging purpose
                 #     print(f"[DEBUG]-[main]- game_logics.detected_capture_moves are - ")
@@ -439,72 +401,153 @@ class GameLogics():
                 flag_valid_move = False
         return game_over, player, flag_valid_move
 
+    def check_game_over(self, player: str, pos: str):
+        """
+        Check if game is over after player makes a particular move
+        # 5 contigous tokens in same line, but only check the lines where player just moved.
+        Input: Player = current player, pos(hex_name) = latest move of current player
+        """
+        shifted_q, shifted_r = self.geometry.get_flat_map_gird(pos)
+        grid_flat_map = np.array(self.variables.HEX_GRID_FLAT_MAP[0])
+        player_symbol = self.variables.PLAYERS[player]['symbol']
+        n = self.variables.boku_rule_cont_pos
+        n_rows, n_cols = len(grid_flat_map), len(grid_flat_map[0])
+        
+        # get the row (q), col(r) of the move in falt_map
+        shifted_q_row  = grid_flat_map[shifted_q,:]
+        shifted_r_col  = grid_flat_map[:,shifted_r]
+    
+        # Check the antidiagonal
+        # collect [row, col] of the antidiagonal containing [shifted_q, shifted_r]
+        anti_diag_index = [[shifted_q, shifted_r]]
+
+        row_index = shifted_q + 1
+        col_index = shifted_r - 1
+        while(row_index<n_rows and col_index>=0):
+            anti_diag_index.append([row_index, col_index])
+            row_index +=1
+            col_index -=1
+
+        row_index = shifted_q - 1
+        col_index = shifted_r + 1
+        # anti_diag_index
+        while(row_index>=0 and col_index<n_cols):
+            anti_diag_index.append([row_index, col_index])
+            row_index -=1
+            col_index +=1
+        sorted_anti_diag_index = sorted(anti_diag_index, key=lambda x: x[0])
+        anti_diag_elems = []
+        for row, col in sorted_anti_diag_index:
+            anti_diag_elems.append(grid_flat_map[row, col])
+        anti_diag_elems = np.array(anti_diag_elems)
+        print("[DEBUG]-[check_game_over]-")
+        print(f"shifted_q_row: {shifted_q_row}, shifted_r_col: {shifted_r_col}, anti_diag_elems: {anti_diag_elems}")
+        for elem in [shifted_q_row, shifted_r_col, anti_diag_elems]:
+            # check if it has more than n number of elements in the row/col/
+            count_player_symbol = np.count_nonzero(elem == player_symbol)
+            # print(f"[DEBUG]-[check_game_over]-count_player_symbol: {count_player_symbol}")   
+            if count_player_symbol >= n:
+                # check for contiguous occurences 
+                for i in range(len(elem) - n + 1):
+                    if all(elem[i:i+n] == player_symbol):
+                            return True
+        return False
+                
+    def get_capture_moves(self, player: str, pos: str):
+        """
+        Check if game is over after player makes a particular move
+        # 5 contigous tokens in same line, but only check the lines where player just moved.
+        Input: Player = current player, pos(hex_name) = latest move of current player
+        """
+        shifted_q, shifted_r = self.geometry.get_flat_map_gird(pos)
+        grid_flat_map = np.array(self.variables.HEX_GRID_FLAT_MAP[0])
+        player_symbol = self.variables.PLAYERS[player]['symbol']
+        n_rows, n_cols = len(grid_flat_map), len(grid_flat_map[0])
+        
+        # get the row (q), col(r) of the move in falt_map
+        shifted_q_row  = grid_flat_map[shifted_q,:]
+        shifted_r_col  = grid_flat_map[:,shifted_r]
+
+        self.detected_capture_moves = []
+        # check all 8 possible spokes of a star that can create trap patters
+        # q axis, rows of flatmap
+        # there must be space for 4 token in the window
+        if len(grid_flat_map[shifted_q, shifted_r :])>=4:
+            trap_len_four = grid_flat_map[shifted_q, shifted_r : shifted_r+4]
+            # trap window of len 4 must have one of the patterns
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q, shifted_r+1], [shifted_q, shifted_r+2]]
+                self.detected_capture_moves.append(capture_len_2)
+        
+        if len(grid_flat_map[shifted_q, : shifted_r+1])>=4:
+            trap_len_four = grid_flat_map[shifted_q, shifted_r-3 : shifted_r+1]
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q, shifted_r-2], [shifted_q, shifted_r-1]]
+                self.detected_capture_moves.append(capture_len_2)
+
+        # r axis, cols of flatmap
+        if len(grid_flat_map[shifted_q : , shifted_r])>=4:
+            trap_len_four = grid_flat_map[shifted_q : shifted_q+4, shifted_r]
+            # trap window of len 4 must have one of the patterns
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q+1, shifted_r], [shifted_q+2, shifted_r]]
+                self.detected_capture_moves.append(capture_len_2)
+        
+        if len(grid_flat_map[ : shifted_q, shifted_r])>=4:
+            trap_len_four = grid_flat_map[shifted_q-3 : shifted_q+1, shifted_r]
+            # trap window of len 4 must have one of the patterns
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q-2, shifted_r], [shifted_q-1, shifted_r]]
+                self.detected_capture_moves.append(capture_len_2)
+        
+        # s axis Check the antidiagonal
+        # collect [row, col] of the antidiagonal containing [shifted_q, shifted_r]
+        anti_diag_index = [[shifted_q, shifted_r]]
+        row_index = shifted_q + 1
+        col_index = shifted_r - 1
+        while(row_index<n_rows and col_index>=0):
+            anti_diag_index.append([row_index, col_index])
+            row_index +=1
+            col_index -=1
+        if len(anti_diag_index)>=4:
+            # take the values of antidiagonal index
+            trap_len_four = [grid_flat_map[row, col] for row, col in anti_diag_index[:4]] #grid_flat_map[shifted_q : shifted_q+4, shifted_r]
+            # trap window of len 4 must have one of the patterns
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q + 1, shifted_r - 1], [shifted_q + 2, shifted_r - 2]]
+                self.detected_capture_moves.append(capture_len_2)
+
+        # repeat the same thing again in the opposite direction 
+        anti_diag_index = [[shifted_q, shifted_r]]
+        row_index = shifted_q - 1
+        col_index = shifted_r + 1
+        while(row_index>=0 and col_index<n_cols):
+            anti_diag_index.append([row_index, col_index])
+            row_index -=1
+            col_index +=1
+        if len(anti_diag_index)>=4:
+            # take the values of antidiagonal index
+            trap_len_four = [grid_flat_map[row, col] for row, col in anti_diag_index[:4]] #grid_flat_map[shifted_q : shifted_q+4, shifted_r]
+            # trap window of len 4 must have one of the patterns
+            if list(trap_len_four) in self.variables.TRAP_PATTERN:
+                capture_len_2 = [[shifted_q - 1, shifted_r + 1], [shifted_q - 2, shifted_r + 2]]
+                self.detected_capture_moves.append(capture_len_2)
+        
+        if (len(self.detected_capture_moves) > 0) and self.flag_track:
+            # check if last event is a move event
+            event_type = list(self.events[-1].keys())[0]
+            if event_type == "move":
+                # add detected captured moves with the "move" event
+                self.events[-1][event_type]["detected_capture_moves"] = self.detected_capture_moves
+            # pprint("[DEBUG] - [EVENTS] - [detect_capture_move]- event added - \n")
+            # pprint(self.events[-5:])
+
 
 if __name__ == "__main__":
     board_variables = BoardVariables()
-    # print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
-    # pprint(board_variables.HEX_GRID_FLAT_MAP)
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
+    pprint(board_variables.HEX_GRID_FLAT_MAP)
     board_geometry = BoardGeometry(board_variables)
-    # print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardGeometry() \n")
-    # pprint(board_variables.HEX_GRID_FLAT_MAP)
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardGeometry() \n")
+    pprint(board_variables.HEX_GRID_FLAT_MAP)
     game_logics = GameLogics(board_variables, board_geometry)
-    # test game logics
-    start_time = time.time()
-    game_logics.check_board("p1")
-    time.sleep(3)
-    print(f"[DEBUG]-[game_logics]-[check_board]- time - {round(time.time()-start_time,2)}")
-
-
-
-    # def check_contiguous_players(grid_flat_map, player, n):
-
-#     rows, cols = len(grid_flat_map), len(grid_flat_map[0])
-#     grid_flat_map = np.array(grid_flat_map)
-
-#     # check for contiguos elements in rows
-#     for row in grid_flat_map:
-#         for i in range (cols - n + 1):
-#             if all(row[i:i+n] == player):
-#                 return True  
-
-#     # check for contiguos elements in cols
-#     for col in grid_flat_map.T:
-#         for i in range (rows - n + 1):
-#             if all(col[i:i+n] == player):
-#                 return True 
-#     # check for contiguos elements in anti-diagonals
-    
-#     for i in range (rows - n + 1):
-#         for j in range(cols - n + 1):
-#             anti_diagonal = np.fliplr(grid_flat_map[i:i+n, j:j+n]).diagonal()
-#             if all(anti_diagonal == player): 
-#                 return True 
-
-# def test_check_contiguous_players(grid_flat_map, player, n):
-#     # same function except instad of returning true or falls it return number of times such occurence happens
-#     rows, cols = len(grid_flat_map), len(grid_flat_map[0])
-#     grid_flat_map = np.array(grid_flat_map)
-
-#     occurence = 0
-#     # check for contiguos elements in rows
-#     for row in grid_flat_map:
-#         # print(f"[Debug]- row - {row}")
-#         for i in range (cols - n + 1):
-#             # print(f"[Debug]- row segments - {row[i:i+n]}, occurance- {occurence}")
-#             if all(row[i:i+n] == player):
-#                 occurence +=1 
-
-#     # check for contiguos elements in cols
-#     for col in grid_flat_map.T:
-#         for i in range (rows - n + 1):
-#             if all(col[i:i+n] == player):
-#                 occurence +=1 
-#     # check for contiguos elements in anti-diagonals
-    
-#     for i in range (rows - n + 1):
-#         for j in range(cols - n + 1):
-#             anti_diagonal = np.fliplr(grid_flat_map[i:i+n, j:j+n]).diagonal()
-#             if all(anti_diagonal == player):
-#                 occurence +=1 
-    
-#     return occurence

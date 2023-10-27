@@ -39,10 +39,8 @@ class Graphics():
         # blit, copy the text surface on to the screen
         self.screen.blit(text_surface, text_rect)
     
-    def draw_circle(self, circle_info):
-        center_cords = circle_info[0]
-        circle_player = circle_info[1]
-        player_color = self.variables.PLAYERS[circle_player]["color"]
+    def draw_circle(self, center_cords, player):
+        player_color = self.variables.PLAYERS[player]["color"]
         border_color = (128, 104, 73)
         border_width = 5
         radius = int(0.7 * self.variables.HEX_SIZE) # 70 % of hex radius
@@ -99,8 +97,6 @@ class Graphics():
             scrollbar_button_rect.top = 10 + (scrolling_offset / max_scroll) * (text_box_rect.height - 50)
         pygame.draw.rect(self.screen, scrollbar_button_color, scrollbar_button_rect)
 
-
-
     def draw_player_tokens(self,):
         """
         draws circles for tokens in flatmap grid
@@ -108,15 +104,15 @@ class Graphics():
         n_rows, n_cols = len(self.variables.HEX_GRID_FLAT_MAP[0]), len(self.variables.HEX_GRID_FLAT_MAP[0][0])
         for r in range(n_rows):
             for c in range(n_cols):
-                if self.variables.HEX_GRID_FLAT_MAP[0][r][c] in [0,1]: # check if the board has a token 
+                if self.variables.HEX_GRID_FLAT_MAP[0][r][c] in [self.variables.PLAYERS["p1"]["symbol"],self.variables.PLAYERS["p2"]["symbol"]]: # check if the board has a token 
                     if self.variables.HEX_GRID_FLAT_MAP[1][r][c]: # not None invalid positions
                         # get the center of the hexagon 
                         (hex_center_x, hex_center_y) = self.variables.HEX_GRID_FLAT_MAP[1][r][c][2], self.variables.HEX_GRID_FLAT_MAP[1][r][c][3] 
-                        if self.variables.HEX_GRID_FLAT_MAP[0][r][c]==1:
+                        if self.variables.HEX_GRID_FLAT_MAP[0][r][c]==self.variables.PLAYERS["p1"]["symbol"]:
                             player="p1"
-                        else:
+                        elif self.variables.HEX_GRID_FLAT_MAP[0][r][c]==self.variables.PLAYERS["p2"]["symbol"]:
                             player="p2"
-                        self.draw_circle([(hex_center_x, hex_center_y), player])
+                        self.draw_circle((hex_center_x, hex_center_y), player)
 
     # def draw_player_turn(self, center_cords, player):
         

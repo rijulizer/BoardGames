@@ -95,6 +95,8 @@ def play_game_multiuser_v2():
                         if clicked_hex_name and not(game_over): # if user actually clicks on a hex
                             
                             game_over, player, _ = game_logics.play_user(clicked_hex_name, player)
+                            print(f"[DEBUG]-[main]-[play_user]-HEX_GRID_FLAT_MAP[0]: ")
+                            pprint(board_variables.HEX_GRID_FLAT_MAP[0])
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
                             scrolling_offset = max_scroll
@@ -128,12 +130,12 @@ def play_game_multiuser_v2():
             graphics.draw_player_tokens()
             
             # indicate player turn
-            graphics.draw_circle([(800,70), player])
+            graphics.draw_circle((800,70), player)
             if len(game_logics.detected_capture_moves) >0:
                 graphics.highlight_capture_moves(game_logics.detected_capture_moves)
                 # in capture mode retain existing player 
                 # as player has been flipped , flip again
-                graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
+                graphics.draw_circle((800,70), game_logics.get_opponent_player(player))
             graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
         else: # game over
             # Create a font for text

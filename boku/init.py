@@ -26,12 +26,12 @@ class BoardVariables():
                 "color": (247, 229, 205),
             },
             "p2":{
-                "symbol": 0,
+                "symbol": -1,
                 "color": (10, 21, 23),
             }
         }
-        self.empty_space = -1
-        # preset trap patterns - [[0,1,1,0],[1,0,0,1]
+        self.empty_space = 0
+        # preset trap patterns - [[-1,1,1,-1],[1,-1,-1,1]
         self.TRAP_PATTERN = [
             [self.PLAYERS["p1"]["symbol"], self.PLAYERS["p2"]["symbol"], self.PLAYERS["p2"]["symbol"],self.PLAYERS["p1"]["symbol"]],
             [self.PLAYERS["p2"]["symbol"], self.PLAYERS["p1"]["symbol"], self.PLAYERS["p1"]["symbol"],self.PLAYERS["p2"]["symbol"]],

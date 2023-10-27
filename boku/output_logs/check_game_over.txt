@@ -1,0 +1,33 @@
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[check_game_over]-
+shifted_q_row: [0 0 0 -1 1 0 0 0 0 0], shifted_r_col: [None None 0 0 0 -1 0 0 0 0 0], anti_diag_elems: [0, 0, 0, 0, 0, -1, 0, 0, 0]     
+[DEBUG]-[main]-[play_user]-HEX_GRID_FLAT_MAP[0]:
+[[None, None, None, None, None, 0, 0, 0, 0, 0],
+ [None, None, None, None, 0, 0, 0, 0, 0, 0],
+ [None, None, None, 0, 0, 0, 0, 0, 0, 0],
+ [None, None, 0, 0, 0, 0, 0, 0, 0, 0],
+ [None, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+ [0, 0, 0, -1, 1, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, None],
+ [0, 0, 0, 0, 0, 0, 0, 0, None, None],
+ [0, 0, 0, 0, 0, 0, 0, None, None, None],
+ [0, 0, 0, 0, 0, 0, None, None, None, None],
+ [0, 0, 0, 0, 0, None, None, None, None, None]]
+##############################
+[DEBUG]-[play_user]- game in - Normal Flow!!
+[DEBUG]-[check_game_over]-
+shifted_q_row: [None 0 0 0 0 1 0 0 0 0], shifted_r_col: [0 0 0 0 1 0 0 0 0 0 None], anti_diag_elems: [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]     
+[DEBUG]-[main]-[play_user]-HEX_GRID_FLAT_MAP[0]:
+[[None, None, None, None, None, 0, 0, 0, 0, 0],
+ [None, None, None, None, 0, 0, 0, 0, 0, 0],
+ [None, None, None, 0, 0, 0, 0, 0, 0, 0],
+ [None, None, 0, 0, 0, 0, 0, 0, 0, 0],
+ [None, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+ [0, 0, 0, -1, 1, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, None],
+ [0, 0, 0, 0, 0, 0, 0, 0, None, None],
+ [0, 0, 0, 0, 0, 0, 0, None, None, None],
+ [0, 0, 0, 0, 0, 0, None, None, None, None],
+ [0, 0, 0, 0, 0, None, None, None, None, None]]
+
+Each time the player turn is changing the anti_diag_elems is changing based on player and last move 
