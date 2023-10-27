@@ -71,10 +71,10 @@ class Agent():
             # make move on the flat_board
             self.game_logics.make_move(clicked_hex_name, player)
             # Check the board if game is over and get trap positions
-            game_over, detected_traps =  self.game_logics.check_board(player)
+            game_over =  self.game_logics.check_game_over(player, clicked_hex_name)
             # check if current move can lead to a capture
             # for inital few turns- detected_traps=[], detected_capture_moves=[]
-            self.game_logics.detect_capture_move(clicked_hex_name, detected_traps)
+            self.game_logics.get_capture_moves(player, clicked_hex_name)
             # in normal move, refresh any illegal move due to capture in prev turn
             self.game_logics.reset_last_captured()
             if game_over:
@@ -137,19 +137,19 @@ class AgentMiniMax(Agent):
         self.game_logics.events_redo = copy.deepcopy(self.state_events_redo)
         return player
     
-    def get_token_count_diff(self, player):
-        """
-        counts the differnece of number of players in the board
-        """
-        oppn_player = self.game_logics.get_opponent_player(player)
-        player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
-                  == self.variables.PLAYERS[player]["symbol"])
-        oppn_player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
-                  == self.variables.PLAYERS[oppn_player]["symbol"])
-        # count diff values are like - +1, +2, -1, -2 
-        # more the count_differnece better the value
-        count_diff =  int(player_count - oppn_player_count)
-        return count_diff
+    # def get_token_count_diff(self, player):
+    #     """
+    #     counts the differnece of number of players in the board
+    #     """
+    #     oppn_player = self.game_logics.get_opponent_player(player)
+    #     player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
+    #               == self.variables.PLAYERS[player]["symbol"])
+    #     oppn_player_count = np.count_nonzero(self.variables.HEX_GRID_FLAT_MAP[0]
+    #               == self.variables.PLAYERS[oppn_player]["symbol"])
+    #     # count diff values are like - +1, +2, -1, -2 
+    #     # more the count_differnece better the value
+    #     count_diff =  int(player_count - oppn_player_count)
+    #     return count_diff
     
     def get_player_proximity_center(self, player):
         """
@@ -158,7 +158,13 @@ class AgentMiniMax(Agent):
         # Value ranges for each token [5,4,3,2,1,0]
         # higher pos_value = better position
         """
-        # proximity to center value, values range from 5 to 0 fromcenter to extreme outer hex
+        # # proximity to center value, values range from 5 to 0 fromcenter to extreme outer hex
+        # shifted_q, shifted_r = self.geometry.get_flat_map_gird(pos)
+        # q, r = shifted_q-5, shifted_r-4 # map to cube-cord q,r
+        # s = -q -r
+        # pos_value = int(5 - np.max(np.abs(np.array([q,r,s]))))
+        # return pos_value
+        
         pos_value = 0
         row_indices, col_indices = np.where(
                 np.array(self.variables.HEX_GRID_FLAT_MAP[0])
@@ -170,7 +176,7 @@ class AgentMiniMax(Agent):
             pos_value += int(5 - np.max(np.abs(np.array([q,r,s]))))
         return pos_value
     
-    def static_eval(self, player):
+    def static_eval(self, player, pos):
         """
         Static evaluation function -
         Input: has access to board state, player 
@@ -232,10 +238,10 @@ class AgentMiniMax(Agent):
             # make move on the flat_board
             self.game_logics.make_move(clicked_hex_name, player)
             # Check the board if game is over and get trap positions
-            game_over, detected_traps =  self.game_logics.check_board(player)
+            game_over =  self.game_logics.check_game_over(player, clicked_hex_name)
             # check if current move can lead to a capture
             # for inital few turns- detected_traps=[], detected_capture_moves=[]
-            self.game_logics.detect_capture_move(clicked_hex_name, detected_traps)
+            self.game_logics.get_capture_moves(player, clicked_hex_name)
             # in normal move, refresh any illegal move due to capture in prev turn
             self.game_logics.reset_last_captured()
             
@@ -279,14 +285,13 @@ class AgentMiniMax(Agent):
             if event_type == "move":
                 self.game_logics.events[-2][event_type]["best_capture_hex"] = captured_hex
                 self.game_logics.events[-2][event_type]["best_capture_hex_cords"] = [shifted_q, shifted_r]
-                
-        
-    def minimax_ab(self, player: str, depth: int, alpha: int, beta: int) -> int:
+                   
+    def minimax_ab(self, player: str, select_hex_name: str, depth: int, alpha: int, beta: int) -> int:
         """
         Always -> MAX -p1, MIN -p2
         """
         # Check the board if game is over and get trap positions
-        game_over, _ =  self.game_logics.check_board(player)
+        game_over =  self.game_logics.check_game_over(player, select_hex_name)
         if game_over:
             if player == 'p1':
                 return 10
@@ -300,9 +305,9 @@ class AgentMiniMax(Agent):
             # print(f"[DEBUG]-[minimax]-depth==0: input_player: {player}, abs(score): {self.static_eval(player)}")
             # return value functions
             if player == 'p1':
-                return self.static_eval(player)
+                return self.static_eval(player, select_hex_name)
             else:
-                return -(self.static_eval(player))
+                return -(self.static_eval(player, select_hex_name))
         
         # generate available moves of the player
         avilable_moves = self.get_valid_moves(player)
@@ -314,7 +319,7 @@ class AgentMiniMax(Agent):
                 # get the eqivalent hex name
                 select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
                 game_over, player, depth_reduce = self.agent_make_move(select_hex_name, player)
-                score = self.minimax_ab(player, depth-depth_reduce, alpha, beta)
+                score = self.minimax_ab(player, select_hex_name, depth-depth_reduce, alpha, beta)
                 # max_score = max(score, max_score)
                 if score> max_score:
                     max_score=score
@@ -335,7 +340,7 @@ class AgentMiniMax(Agent):
                 # get the eqivalent hex name
                 select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
                 game_over, player, depth_reduce = self.agent_make_move(select_hex_name, player)
-                score = self.minimax_ab(player, depth-depth_reduce, alpha, beta)
+                score = self.minimax_ab(player, select_hex_name, depth-depth_reduce, alpha, beta)
                 # min_score = min(score, min_score)
                 if score< min_score:
                     min_score=score
@@ -368,13 +373,13 @@ class AgentMiniMax(Agent):
             select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
             # print(f"[Debug]-[play_agent]-player: {player}, select_hex_name: {select_hex_name}")
             # search best move
-            game_over, player, depth_reduce = self.agent_make_move(select_hex_name, player)
-            score = self.minimax_ab(player, depth, - np.inf, + np.inf) 
+            game_over, player, _ = self.agent_make_move(select_hex_name, player)
+            score = self.minimax_ab(player, select_hex_name, depth, - np.inf, + np.inf) 
             if score < min_score:
                 min_score = score
                 best_hex = select_hex_name
                 self.mark_best_capture_event()
-                best_events = self.game_logics.events[-5:]
+                best_events = self.game_logics.events[-3:]
             # print(f"score: {score}, min_hex: {best_hex}, min_score: {min_score}")
             # undo move
             player = self.game_logics.undo_events()
@@ -384,121 +389,13 @@ class AgentMiniMax(Agent):
         # trasnfer back copied game states to games_logics object
         player = self.trasfer_prev_game_states()
         # make the final move, if the move leads to capture it will capture
-        game_over, player, depth_reduce  = self.agent_make_move(best_hex, player)
+        game_over, player, _  = self.agent_make_move(best_hex, player)
         if 'best_capture_hex' in best_events[-1]['move'].keys():
             capture_hex = best_events[-1]['move']['best_capture_hex']
             # call agent_make_move again to capture
             game_over, player, _  = self.agent_make_move(capture_hex, player)
 
         return game_over, player
-    
-    
-    
-    # def place_token(self, board, pos, player):
-    #     """
-    #     Places player token on board position
-    #     Return: 2D board with placed token, empty detected capture list
-    #     """
-    #     # shifted_q, shifted_r = self.geometry.flat_map_gird(pos)
-    #     shifted_q, shifted_r = pos
-    #     board[shifted_q][shifted_r] = self.variables.PLAYERS[player]['symbol']
-    #     # after a new move has been made referesh the old detected_capture_moves list
-    #     detected_capture_moves = []
-    #     return board, detected_capture_moves
-    
-    # def check_board(self, board, player: str) -> tuple[bool, list]:
-    #     """
-    #     Check board for->
-    #     1. 5 contigous tokens in same line
-    #     2. trap condition
-    #     """
-    #     grid_flat_map = np.array(board)
-    #     player_symbol = self.variables.PLAYERS[player]['symbol']
-    #     n = self.variables.boku_rule_cont_pos
-        
-    #     rows, cols = len(grid_flat_map), len(grid_flat_map[0])
-
-    #     detect_traps = []
-    #     # iterating over r
-    #     # check for contiguos elements in rows
-    #     for row_i, row in enumerate(grid_flat_map):
-    #         for i in range (cols - n + 1):
-    #             if all(row[i:i+n] == player_symbol):
-    #                 return True, detect_traps
-    #             if list(row[i:i+4]) in self.variables.TRAP_PATTERN:
-    #                 detect_trap = [[row_i,i] for i in range(i,i+4)]
-    #                 detect_traps.append(detect_trap)
-    #         # since n=5 i will stop 1 before so add one more check for i+1: i+1+5
-    #         if list(row[i+1:i+1+4]) in self.variables.TRAP_PATTERN:
-    #                 detect_trap = [[row_i,i] for i in range(i+1,i+1+4)]
-    #                 detect_traps.append(detect_trap)
-        
-    #     # iterating over q
-    #     # check for contiguos elements in cols
-    #     for col_i, col in enumerate(grid_flat_map.T):
-    #         for i in range (rows - n + 1):
-    #             if all(col[i:i+n] == player_symbol):
-    #                 return True, detect_traps
-    #             if list(col[i:i+4]) in self.variables.TRAP_PATTERN:
-    #                 detect_trap = [[i, col_i] for i in range(i,i+4)]
-    #                 detect_traps.append(detect_trap)
-    #         # since n=5 i will stop 1 before so add one more check for i+1: i+1+5
-    #         if list(col[i+1:i+1+4]) in self.variables.TRAP_PATTERN:
-    #                 detect_trap = [[i, col_i] for i in range(i+1,i+1+4)]
-    #                 detect_traps.append(detect_trap)
-
-    #     # check for contiguos elements in anti-diagonals
-    #     for i in range (rows - n + 1):
-    #         for j in range(cols - n + 1):
-    #             anti_diagonal = np.fliplr(grid_flat_map[i:i+n, j:j+n]).diagonal()
-    #             if all(anti_diagonal == player_symbol):
-    #                 return True, detect_traps
-                
-    #             # check for trap pattern
-    #             anti_diagonal = np.fliplr(grid_flat_map[i:i+4, j:j+4]).diagonal()
-    #             if list(anti_diagonal) in self.variables.TRAP_PATTERN:
-    #                 # Pattern matched; now find the original indices
-    #                 detect_trap = [[i + k, j + 4 - k - 1] for k in range(4)]
-    #                 detect_traps.append(detect_trap)
-                    
-    #         # additional j+1 case because n=5 and trap_size=4
-    #         anti_diagonal = np.fliplr(grid_flat_map[i:i+4, j+1:j+1+4]).diagonal()
-    #         if list(anti_diagonal) in self.variables.TRAP_PATTERN:
-    #             # Pattern matched; now find the original indices
-    #             detect_trap = [[i + k, j + 1 + 4 - k - 1] for k in range(4)]
-    #             detect_traps.append(detect_trap)
-                
-    #     # consider one more case with i+1 and iterate over all j
-    #     for j in range(cols - 4 + 1):
-    #         anti_diagonal = np.fliplr(grid_flat_map[i+1:i+1+4, j:j+4]).diagonal()
-    #         if list(anti_diagonal) in self.variables.TRAP_PATTERN:
-    #             # Pattern matched; now find the original indices
-    #             detect_trap = [[i+1 + k, j + 4 - k - 1] for k in range(4)]
-    #             detect_traps.append(detect_trap)
-
-    #     return False, detect_traps            
-
-    # def detect_capture_move(self, pos, detected_traps: list):
-    #     """
-    #     checks if a particular move leads to a capture situation
-    #     """
-    #     detected_capture_moves = []
-    #     shifted_q, shifted_r = pos
-        
-    #     # check if the current move is part of any of the two ends of a trap pattern
-    #     for trap in detected_traps:
-    #         if [shifted_q, shifted_r] in [trap[0],trap[3]]: 
-    #             detected_capture_moves.append(trap[1:3])
-    #     return detected_capture_moves
-        
-    #     # if (len(detected_capture_moves) > 0):
-    #     #     # check if last event is a move event
-    #     #     event_type = list(self. events[-1].keys())[0]
-    #     #     if event_type == "move":
-    #     #         # modify the detected captured moves 
-    #     #         self.events[-1][event_type]["detected_capture_moves"] = self.detected_capture_moves
-    
-
 
 if __name__ == "__main__":
     board_variables = BoardVariables()

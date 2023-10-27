@@ -70,6 +70,7 @@ def play_game_agent_user():
                         board_variables = BoardVariables()
                         board_geometry = BoardGeometry(board_variables)
                         game_logics = GameLogics(board_variables, board_geometry)
+                        # agent = Agent(board_variables, game_logics)
                         agent_2 = AgentMiniMax(board_variables, board_geometry, game_logics)
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
@@ -117,7 +118,7 @@ def play_game_agent_user():
                                 print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
                                 # game_over, player = agent.play_random_agent(player)
-                                game_over, player = agent_2.play_agent(player, depth=2)
+                                game_over, player = agent_2.play_agent(player, depth=3)
                             
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
