@@ -8,14 +8,13 @@ from tqdm import tqdm
 
 from init import BoardVariables
 from geometry import BoardGeometry
-from game_logics import GameLogics
-
+from game_logics import GameLogics, TTable
 
 class Agent():
     """
     Random agent as base calss, randomly places tokens on th board
     """
-    def __init__(self, game_variables, game_logics,):
+    def __init__(self, game_variables, game_logics):
         self.game_logics = game_logics
         self.variables = game_variables
     
@@ -108,7 +107,7 @@ class Agent():
         return game_over, oppn_player
 #################################################################
 class AgentMiniMax(Agent):
-    def __init__(self, game_variables, geometry, game_logics):
+    def __init__(self, game_variables, game_logics, geometry):
         super().__init__(game_variables, game_logics)
         self.geometry = geometry
 
@@ -397,10 +396,175 @@ class AgentMiniMax(Agent):
 
         return game_over, player
 
+class AgentMiniMaxTT(AgentMiniMax):
+    """
+    Agent has Minimax, alpha-beta, Transposition tables
+    """
+    def __init__(self, game_variables, game_logics, geometry, trans_table):
+        super().__init__(game_variables, game_logics, geometry)
+        self.trans_table = trans_table
+               
+    def minimax_ab_TT(self, player: str, select_hex_name: str, depth: int, alpha: int, beta: int) -> int:
+        """
+        # MiniMax, Alpha_Beta, Transposition Tables
+        Always -> MAX -p1, MIN -p2
+        """
+        # Check the board if game is over and get trap positions
+        game_over =  self.game_logics.check_game_over(player, select_hex_name)
+        if game_over:
+            if player == 'p1':
+                return 10
+            elif player == 'p2':
+                return -10
+            else:
+                # draw scenario
+                return 0
+            
+        # check if table_state, player combo exists in transposition table 
+        if (self.trans_table.get_state_value(self.variables.HEX_GRID_FLAT_MAP[0], player)):
+            
+            (ext_player_turn, score, ext_depth, ext_alpha, ext_beta) = self.trans_table.get_state_value(self.variables.HEX_GRID_FLAT_MAP[0], player)
+            print(f"[DEBUG]-[minimax_ab_TT]- found matching entry in TT: { ext_player_turn, score, ext_depth, ext_alpha, ext_beta}")
+            return score
+        
+        # get heuristic evaluation 
+        if depth <= 0:
+            # player = self.game_logics.get_opponent_player(player)
+            # print(f"[DEBUG]-[minimax]-depth==0: input_player: {player}, abs(score): {self.static_eval(player)}")
+            # return value functions
+            if player == 'p1':
+                score = self.static_eval(player, select_hex_name)
+            else:
+                score = -(self.static_eval(player, select_hex_name))
+            # save state information in TT
+            self.trans_table.store_state_value(self.variables.HEX_GRID_FLAT_MAP[0], player, score, depth, alpha, beta)
+            return score
+        # generate available moves of the player
+        avilable_moves = self.get_valid_moves(player)
+        if player == 'p1':
+            max_score = -np.inf
+            # iterate through all available moves
+            for move_index in range(avilable_moves.shape[0]):
+                shifted_q, shifted_r = avilable_moves[move_index]
+                # get the eqivalent hex name
+                select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
+                player_turn = player # save the original player, whose turn it was as play will be switched
+
+                game_over, player, depth_reduce = self.agent_make_move(select_hex_name, player)
+                score = self.minimax_ab(player, select_hex_name, depth-depth_reduce, alpha, beta)
+                # max_score = max(score, max_score)
+                if score> max_score:
+                    max_score=score
+                    self.mark_best_capture_event()
+                alpha = max(alpha, score)
+                # save state information in TT
+                self.trans_table.store_state_value(self.variables.HEX_GRID_FLAT_MAP[0], player_turn, score, depth, alpha, beta)
+                # undo move
+                player = self.game_logics.undo_events()
+                
+                if alpha >= beta:
+                    break
+                
+            return max_score
+        else:
+            min_score = +np.inf
+            # iterate through all available moves
+            for move_index in range(avilable_moves.shape[0]):
+                shifted_q, shifted_r = avilable_moves[move_index]
+                # get the eqivalent hex name
+                select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
+                player_turn = player # save the original player, whose turn it was as play will be switched
+
+                game_over, player, depth_reduce = self.agent_make_move(select_hex_name, player)
+                score = self.minimax_ab(player, select_hex_name, depth-depth_reduce, alpha, beta)
+                # min_score = min(score, min_score)
+                if score< min_score:
+                    min_score=score
+                    self.mark_best_capture_event()
+                beta = min(beta, score)
+                # save state information in TT
+                self.trans_table.store_state_value(self.variables.HEX_GRID_FLAT_MAP[0], player_turn, score, depth, alpha, beta)
+                # undo move
+                player = self.game_logics.undo_events()
+                if alpha >= beta:
+                    break
+            
+            return min_score
+    
+    def iter_deep_search(self, player, select_hex_name, max_depth):#max_time: float):
+        """
+        Iteratively increase the depth of search
+        Input: max_time - maximum allowed time in minues
+        """
+        # start_time = time.time()
+        min_score = + np.inf
+        depth = 0
+        while(depth<= max_depth): #(time.time() - start_time) <= int(max_time*60)): 
+            score = self.minimax_ab(player, select_hex_name, depth, - np.inf, + np.inf) 
+            depth+=1
+            if score < min_score:
+                min_score = score
+        # return the best score acorss different depths
+        return min_score
+    
+    def play_agent(self, player, max_depth):
+        """
+        parent function that makes agent make the final move
+        Agent - 2nd player
+        """
+        # agent player
+        # generate all valid moves before each move
+        avilable_moves = self.get_valid_moves(player)
+        print(f"[Debug]-[play_agent]-avilable_moves len:{len(avilable_moves)}")
+        min_score = + np.inf
+        # copy game states before changes are made during the search
+        self.copy_game_states(player)
+        
+        # iterate through all available moves
+        for move_index in tqdm(range(avilable_moves.shape[0])):
+            shifted_q, shifted_r = avilable_moves[move_index]
+            # get the eqivalent hex name
+            select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
+            # print(f"[Debug]-[play_agent]-player: {player}, select_hex_name: {select_hex_name}")
+            # search best move
+            game_over, player, _ = self.agent_make_move(select_hex_name, player)
+            
+            score = self.iter_deep_search(player, select_hex_name, max_depth) 
+            if score < min_score:
+                min_score = score
+                best_hex = select_hex_name
+                # if best move lead to capture manipulate events
+                self.mark_best_capture_event()
+                best_events = self.game_logics.events[-3:]
+            
+            # print(f"score: {score}, min_hex: {best_hex}, min_score: {min_score}")
+            # undo move
+            player = self.game_logics.undo_events()
+        print(f"[Debug]-[play_agent]-best_hex: {best_hex}, last_score: {score}, min_score: {min_score}")
+        # print("[DEBUG]-[play_agent]-[best_events]- last 5 events- \n")
+        # pprint(best_events)          
+        # trasnfer back copied game states to games_logics object
+        player = self.trasfer_prev_game_states()
+
+        # make the actual move based on search 
+        # if the move leads to capture it will capture
+        game_over, player, _  = self.agent_make_move(best_hex, player)
+        if 'best_capture_hex' in best_events[-1]['move'].keys():
+            capture_hex = best_events[-1]['move']['best_capture_hex']
+            # call agent_make_move again to capture
+            game_over, player, _  = self.agent_make_move(capture_hex, player)
+
+        # print(f"[Debug]-[play_agent]-TT: total entries - {len(self.trans_table.tt_dict.keys())}")
+        # pprint(self.trans_table.tt_dict)
+        
+        return game_over, player
+
+
 if __name__ == "__main__":
     board_variables = BoardVariables()
     board_geometry = BoardGeometry(board_variables)
+    trans_table = TTable()
     game_logics = GameLogics(board_variables, board_geometry)
     agent = Agent(board_variables, game_logics,)
-    agent_ab = AgentMiniMax(board_variables, game_logics,)
-
+    agent_ab = AgentMiniMax(board_variables, game_logics, board_geometry)
+    agnet_TT = AgentMiniMaxTT(board_variables, game_logics, board_geometry, trans_table)

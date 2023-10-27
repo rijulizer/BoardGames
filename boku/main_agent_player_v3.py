@@ -10,9 +10,9 @@ import cProfile
 
 from init import BoardVariables
 from geometry import BoardGeometry
-from game_logics import GameLogics
+from game_logics import GameLogics, TTable
 from graphics import Graphics
-from agents import Agent, AgentMiniMax
+from agents import Agent, AgentMiniMax, AgentMiniMaxTT
 
 def play_game_agent_user():
     """
@@ -23,7 +23,10 @@ def play_game_agent_user():
     board_geometry = BoardGeometry(board_variables)
     game_logics = GameLogics(board_variables, board_geometry)
     # agent = Agent(board_variables, game_logics)
-    agent_2 = AgentMiniMax(board_variables, board_geometry, game_logics)
+    # agent_ab = AgentMiniMax(board_variables, board_geometry, game_logics)
+    trans_table = TTable()
+    agnet_TT = AgentMiniMaxTT(board_variables, game_logics, board_geometry, trans_table)
+
 
     # Initialize Pygame
     pygame.init()
@@ -71,7 +74,9 @@ def play_game_agent_user():
                         board_geometry = BoardGeometry(board_variables)
                         game_logics = GameLogics(board_variables, board_geometry)
                         # agent = Agent(board_variables, game_logics)
-                        agent_2 = AgentMiniMax(board_variables, board_geometry, game_logics)
+                        # agent_ab = AgentMiniMax(board_variables, board_geometry, game_logics)
+                        trans_table = TTable()
+                        agnet_TT = AgentMiniMaxTT(board_variables, game_logics, board_geometry, trans_table)
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
                         game_over = False
@@ -118,7 +123,9 @@ def play_game_agent_user():
                                 print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
                                 # game_over, player = agent.play_random_agent(player)
-                                game_over, player = agent_2.play_agent(player, depth=3)
+                                # game_over, player = agent_ab.play_agent(player, depth=2)
+                                game_over, player = agnet_TT.play_agent(player, max_depth=2)
+                                
                             
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)

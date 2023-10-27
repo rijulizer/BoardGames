@@ -4,6 +4,7 @@ import math
 import numpy as np
 from pprint import pprint
 import time
+import hashlib
 
 from init import BoardVariables
 from geometry import BoardGeometry
@@ -541,6 +542,46 @@ class GameLogics():
                 flag_valid_move = False
         return game_over, player, flag_valid_move
 
+
+class TTable:
+    def __init__(self,):
+        self.tt_dict = {}
+
+    def get_hash_key(self, board_state, player_turn: str) -> str:
+        """
+        convert gameboard state and player turn to a hash key
+        """
+        hash_fn = hashlib.md5()
+        # update a, update b has the same effect as update (a+b)
+        hash_fn.update(str(board_state).encode('utf-8'))
+        hash_fn.update(player_turn.encode('utf-8'))
+        hash_digest = hash_fn.hexdigest()
+        return hash_digest
+
+    def store_state_value(self, board_state, player_turn, value, depth, alpha, beta):
+        """
+        Stores the game states in Transposiotin tables
+        """
+        hash_digest = self.get_hash_key(board_state, player_turn)
+        if self.tt_dict.get(hash_digest): # entry already exists
+            (ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta) = self.tt_dict[hash_digest]
+            if(depth < ext_depth):
+                # as the value of depth-=1 reduces as the tree grows deeper 
+                # depth < ext_depth: means the new depth is lower ie, deeper
+                self.tt_dict[hash_digest] = (player_turn, value, depth, alpha, beta)
+        else: # new entry
+            self.tt_dict[hash_digest] = (player_turn, value, depth, alpha, beta)
+
+    def get_state_value(self, board_state, player_turn,):
+        """
+        Searches Transposition Table to retrieve existing value of the state
+        """
+        hash_digest = self.get_hash_key(board_state, player_turn)
+        if self.tt_dict.get(hash_digest): # entry already exists
+            (ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta) = self.tt_dict[hash_digest]
+            return ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta
+        
+        
 if __name__ == "__main__":
     board_variables = BoardVariables()
     print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
