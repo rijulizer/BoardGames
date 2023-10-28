@@ -4,7 +4,6 @@ import math
 import numpy as np
 from pprint import pprint
 import time
-import hashlib
 
 from init import BoardVariables
 from geometry import BoardGeometry
@@ -192,17 +191,12 @@ class GameLogics():
     #             self.events[-1][event_type]["detected_capture_moves"] = self.detected_capture_moves
     #         # pprint("[DEBUG] - [EVENTS] - [detect_capture_move]- event added - \n")
     #         # pprint(self.events[-5:])
-    
-    def check_game_over(self, player: str, pos: str):
+    def get_hex_axis_lines(self, pos: str):
         """
-        Check if game is over after player makes a particular move
-        # 5 contigous tokens in same line, but only check the lines where player just moved.
-        Input: Player = current player, pos(hex_name) = latest move of current player
+        For a given point in 2d array, get the column, row and antidiagonal thourgh the point
         """
         shifted_q, shifted_r = self.geometry.get_flat_map_gird(pos)
         grid_flat_map = np.array(self.variables.HEX_GRID_FLAT_MAP[0])
-        player_symbol = self.variables.PLAYERS[player]['symbol']
-        n = self.variables.boku_rule_cont_pos
         n_rows, n_cols = len(grid_flat_map), len(grid_flat_map[0])
         
         # get the row (q), col(r) of the move in falt_map
@@ -228,10 +222,25 @@ class GameLogics():
             row_index -=1
             col_index +=1
         sorted_anti_diag_index = sorted(anti_diag_index, key=lambda x: x[0])
+        # get the position of the point in sorted_anti_diag_index 
+        pos_adiag = shifted_q = np.where((sorted_anti_diag_index==np.array([shifted_q, shifted_r])).all(axis=1))[0][0]
         anti_diag_elems = []
         for row, col in sorted_anti_diag_index:
             anti_diag_elems.append(grid_flat_map[row, col])
         anti_diag_elems = np.array(anti_diag_elems)
+        return [shifted_q_row, shifted_r_col, anti_diag_elems, pos_adiag]
+        
+
+    def check_game_over(self, player: str, pos: str):
+        """
+        Check if game is over after player makes a particular move
+        # 5 contigous tokens in same line, but only check the lines where player just moved.
+        Input: Player = current player, pos(hex_name) = latest move of current player
+        """
+        player_symbol = self.variables.PLAYERS[player]['symbol']
+        n = self.variables.boku_rule_cont_pos
+
+        [shifted_q_row, shifted_r_col, anti_diag_elems, _] = self.get_hex_axis_lines(pos)
         # print("[DEBUG]-[check_game_over]-")
         # print(f"shifted_q_row: {shifted_q_row}, shifted_r_col: {shifted_r_col}, anti_diag_elems: {anti_diag_elems}")
         for elem in [shifted_q_row, shifted_r_col, anti_diag_elems]:
@@ -541,46 +550,7 @@ class GameLogics():
                 self.history_text.append(f"Invalid Move!, you have to capture.")
                 flag_valid_move = False
         return game_over, player, flag_valid_move
-
-
-class TTable:
-    def __init__(self,):
-        self.tt_dict = {}
-
-    def get_hash_key(self, board_state, player_turn: str) -> str:
-        """
-        convert gameboard state and player turn to a hash key
-        """
-        hash_fn = hashlib.md5()
-        # update a, update b has the same effect as update (a+b)
-        hash_fn.update(str(board_state).encode('utf-8'))
-        hash_fn.update(player_turn.encode('utf-8'))
-        hash_digest = hash_fn.hexdigest()
-        return hash_digest
-
-    def store_state_value(self, board_state, player_turn, value, depth, alpha, beta):
-        """
-        Stores the game states in Transposiotin tables
-        """
-        hash_digest = self.get_hash_key(board_state, player_turn)
-        if self.tt_dict.get(hash_digest): # entry already exists
-            (ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta) = self.tt_dict[hash_digest]
-            if(depth < ext_depth):
-                # as the value of depth-=1 reduces as the tree grows deeper 
-                # depth < ext_depth: means the new depth is lower ie, deeper
-                self.tt_dict[hash_digest] = (player_turn, value, depth, alpha, beta)
-        else: # new entry
-            self.tt_dict[hash_digest] = (player_turn, value, depth, alpha, beta)
-
-    def get_state_value(self, board_state, player_turn,):
-        """
-        Searches Transposition Table to retrieve existing value of the state
-        """
-        hash_digest = self.get_hash_key(board_state, player_turn)
-        if self.tt_dict.get(hash_digest): # entry already exists
-            (ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta) = self.tt_dict[hash_digest]
-            return ext_player_turn, ext_value, ext_depth, ext_alpha, ext_beta
-        
+     
         
 if __name__ == "__main__":
     board_variables = BoardVariables()
