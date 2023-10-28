@@ -582,7 +582,7 @@ class AgentMiniMaxTT(AgentMiniMaxID):
             
         
         # get heuristic evaluation 
-        if depth <= 0:
+        if (depth <=0) and not(len(self.game_logics.detected_capture_moves) > 0):
             # player = self.game_logics.get_opponent_player(player)
             # print(f"[DEBUG]-[minimax]-depth==0: input_player: {player}, abs(score): {self.static_eval(player)}")
             # return value functions

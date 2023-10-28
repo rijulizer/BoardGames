@@ -368,7 +368,7 @@ class GameLogics():
         
         shifted_q, shifted_r = self.geometry.get_flat_map_gird(clicked_hex_name)
         # get the player whos turn it was.
-        player = self.get_opponent_player( )
+        player = self.get_opponent_player(oppn_player)
         removed_symbol =  self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r]
         self.variables.HEX_GRID_FLAT_MAP[0][shifted_q][shifted_r] = self.variables.empty_space # empty captured position
         # add captured move to illegal positions for the next move of the opponent

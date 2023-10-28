@@ -127,7 +127,7 @@ def play_game_agent_user():
                                 print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
                                 # game_over, player = agent.play_random_agent(player)
-                                # game_over, player = agent_ab.play_agent(player, depth=3)
+                                # game_over, player = agent_ab.play_agent(player, depth=1)
                                 # game_over, player = agent_ID.play_agent(player, max_depth=2)
                                 game_over, player = agnet_TT.play_agent(player, max_depth=2)
                                  
