@@ -674,7 +674,7 @@ class AgentMiniMaxTT(AgentMiniMaxID):
                 # print(f"[Debug]-[play_agent]-[ID]-player: {player}, select_hex_name: {select_hex_name}")
                 # search best move
                 game_over, oppn_player, _ = self.agent_make_move(select_hex_name, player)
-                score = self.minimax_ab(player, True, select_hex_name, depth, - np.inf, + np.inf)
+                score = self.minimax_ab_TT(player, True, select_hex_name, depth, - np.inf, + np.inf)
                 if score < min_score:
                     min_score = score
                     best_hex = select_hex_name

@@ -1,4 +1,5 @@
 import numpy as np
+from pprint import pprint
 
 class BoardVariables():
     """
@@ -175,5 +176,9 @@ class BoardVariables():
 
 
 if __name__ == "__main__":
-    board_variables =  BoardVariables()
-    print("[DEBUG]- [Boardvariables]- Players - ",board_variables.PLAYERS)
+    board_variables = BoardVariables()
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_CORDS after BoardVariables() \n")
+    pprint(board_variables.HEX_GRID_CORDS)
+    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
+    pprint(board_variables.HEX_GRID_FLAT_MAP)
+    # print("[DEBUG]- [Boardvariables]- Players - ",board_variables.PLAYERS)

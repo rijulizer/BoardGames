@@ -109,11 +109,6 @@ class BoardGeometry():
 
 if __name__ == "__main__":
     board_variables = BoardVariables()
-    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_CORDS after BoardVariables() \n")
-    pprint(board_variables.HEX_GRID_CORDS)
-    print("[DEBUG]-[geometry]- board_variable.HEX_GRID_FLAT_MAP after BoardVariables() \n")
-    pprint(board_variables.HEX_GRID_FLAT_MAP)
-
     board_geometry = BoardGeometry(board_variables)
     print("[DEBUG]-[geometry]- board_variable.HEX_GRID_CORDS after BoardGeometry() \n")
     pprint(board_variables.HEX_GRID_CORDS)

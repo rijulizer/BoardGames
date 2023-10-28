@@ -1,16 +1,18 @@
 import pygame
-import pygame_menu
+# import pygame_menu
 import sys
 import math
 import numpy as np
 from pprint import pprint
 import time
+import cProfile
+
 
 from init import BoardVariables
 from geometry import BoardGeometry
 from game_logics import GameLogics
 from graphics import Graphics
-from agents import Agent
+from agents import Agent, AgentMiniMax, AgentMiniMaxID, AgentMiniMaxTT, TTable
 
 def play_game_agent_user():
     """
@@ -20,7 +22,13 @@ def play_game_agent_user():
     board_variables = BoardVariables()
     board_geometry = BoardGeometry(board_variables)
     game_logics = GameLogics(board_variables, board_geometry)
-    agent = Agent(board_variables, game_logics)
+    print("[DEBUG]- Initiating Agents...")
+    # agent = Agent(board_variables, game_logics)
+    # agent_ab = AgentMiniMax(board_variables, game_logics, board_geometry)
+    # agent_ID = AgentMiniMaxID(board_variables, game_logics, board_geometry)
+    trans_table = TTable()
+    agnet_TT = AgentMiniMaxTT(board_variables, game_logics, board_geometry, trans_table)
+
 
     # Initialize Pygame
     pygame.init()
@@ -33,14 +41,11 @@ def play_game_agent_user():
     restart_button_rect = pygame.Rect(900, 40, 150, 50)  # Define the restart button's position and size
     undo_button_rect = pygame.Rect(850, 100, 30, 30)
     redo_button_rect = pygame.Rect(1070, 100, 30, 30)
-    # Create a font for text
-    game_over_font = pygame.font.Font(None, 60)   
-    game_over_text = game_over_font.render("Game Over", True, (0,0,0))
+    
     
     graphics = Graphics(screen, board_variables)
 
     player = "p1" # start with player p1
-    detected_traps = []
     # variables for history box
     text_line_space = 30
     # Calculate the maximum scrolling range
@@ -64,14 +69,18 @@ def play_game_agent_user():
                     print(f"[DEBUG]-[main]-mouse position- {mouse_x, mouse_y}, user_clicked_hex- {clicked_hex_name}")
                     # print(f"""flat_pos- {(board_variables.HEX_GRID_CORDS[clicked_hex_name][0]+5, board_variables.HEX_GRID_CORDS[clicked_hex_name][1]+4)}""")
                     
-                    
                     # restart
                     if graphics.is_point_inside_rect(mouse_x, mouse_y, restart_button_rect):
                         print("[DEBUG]-[main]-Restart button clicked")  # Perform restart action here
                         board_variables = BoardVariables()
                         board_geometry = BoardGeometry(board_variables)
                         game_logics = GameLogics(board_variables, board_geometry)
-                        agent = Agent(board_variables, game_logics)
+                        # agent = Agent(board_variables, game_logics)
+                        # agent_ab = AgentMiniMax(board_variables, game_logics, board_geometry)
+                        # agent_ID = AgentMiniMaxID(board_variables, game_logics, board_geometry)
+                        trans_table = TTable()
+                        agnet_TT = AgentMiniMaxTT(board_variables, game_logics, board_geometry, trans_table)
+
                         graphics = Graphics(screen, board_variables)
                         player = "p1" # always restart to player 1
                         game_over = False
@@ -86,9 +95,9 @@ def play_game_agent_user():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to undo...")
                             game_logics.history_text.append(f"No events to undo.")
-                        # Calculate the maximum scrolling range
-                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
-                        scrolling_offset = max_scroll
+                            # Calculate the maximum scrolling range
+                            max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                            scrolling_offset = max_scroll
                     # Redo
                     elif graphics.is_point_inside_rect(mouse_x, mouse_y, redo_button_rect):
                         if len(game_logics.events_redo) > 0:
@@ -96,25 +105,32 @@ def play_game_agent_user():
                         else:
                             print("[DEBUG]-[Undo_events]- No events to redo...")
                             game_logics.history_text.append(f"No events to redo.")
-                        # Calculate the maximum scrolling range
-                        max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
-                        scrolling_offset = max_scroll
+                            # Calculate the maximum scrolling range
+                            max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
+                            scrolling_offset = max_scroll
         
                     # Game Steps
                     else: 
                         if clicked_hex_name and not(game_over): # if user actually clicks on a hex
-                            # if user has a capture move skips agents move : user gets 2 move in 2 clicks
-                            # if agent has a capture move agent moves again : agent gets 2 move in row
-                            # since for user it is two consecutive cliks thats why its a bit different logic
+                            # if user has a capture move:  skips agents move, user gets 2 move in 2 clicks
+                            # if agent has a capture move: agent moves again, agent gets 2 move in row
+                            # since for user it is two consecutive clicks thats why its a bit different logic
                             # user's turn
+                            print(f"[DEBUG]-[main]-Players turn - {player}")
                             game_over, player, user_valid_move = game_logics.play_user(clicked_hex_name, player)
+                            # check if users move leads to a capture move
                             users_capture_move = True if len(game_logics.detected_capture_moves) > 0 else False
                             # print(f"[DEBUG]-[main]-[users turn] users_capture_move- {users_capture_move}, agents_capture_move-{agents_capture_move}")                          
                             
                             # agent's turn
                             if (not game_over) and (not users_capture_move) and user_valid_move:
+                                print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
-                                game_over, player = agent.play_random_agent(player)
+                                # game_over, player = agent.play_random_agent(player)
+                                # game_over, player = agent_ab.play_agent(player, depth=3)
+                                # game_over, player = agent_ID.play_agent(player, max_depth=2)
+                                game_over, player = agnet_TT.play_agent(player, max_depth=2)
+                                 
                             
                             # Calculate the maximum scrolling range
                             max_scroll = max(0, len(game_logics.history_text) * text_line_space - 600)
@@ -147,16 +163,20 @@ def play_game_agent_user():
             graphics.draw_player_tokens()
             
             # indicate player turn
-            graphics.draw_circle([(800,70), player])
+            graphics.draw_circle((800,70), player)
             if len(game_logics.detected_capture_moves) >0:
                 graphics.highlight_capture_moves(game_logics.detected_capture_moves)
                 # in capture mode retain existing player 
                 # as player has been flipped , flip again
-                graphics.draw_circle([(800,70), game_logics.get_opponent_player(player)])
+                graphics.draw_circle((800,70), game_logics.get_opponent_player(player))
 
             graphics.create_hist_box(game_logics.history_text, (800,160), scrolling_offset, max_scroll)
         else: # game over
+            # Create a font for text
+            game_over_font = pygame.font.Font(None, 60)   
+            game_over_text = game_over_font.render("Game Over", True, (0,0,0))
             screen.blit(game_over_text, (board_variables.WIDTH // 2 - 200, board_variables.HEIGHT // 2 - 100))
+
         pygame.display.flip()
         clock.tick(60)
 
@@ -166,6 +186,7 @@ def play_game_agent_user():
 
 if __name__=="__main__":
     play_game_agent_user()
+    # cProfile.run('play_game_agent_user()')
 
 
 #  if not agents_capture_move:
