@@ -123,8 +123,8 @@ def play_game_agent_user():
                                 print(f"[DEBUG]-[main]-Agents turn -  {player}")
                                 # if game is not over and its not capture move by the player
                                 # game_over, player = agent.play_random_agent(player)
-                                game_over, player = agent_ab.play_agent(player, depth=0)
-                                # game_over, player = agnet_TT.play_agent(player, max_depth=0)
+                                # game_over, player = agent_ab.play_agent(player, depth=0)
+                                game_over, player = agnet_TT.play_agent(player, max_depth=1)
                                 
                             
                             # Calculate the maximum scrolling range

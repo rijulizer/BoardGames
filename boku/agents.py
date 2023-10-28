@@ -294,9 +294,9 @@ class AgentMiniMax(Agent):
         game_over =  self.game_logics.check_game_over(player, select_hex_name)
         if game_over:
             if player == 'p1':
-                return 100
+                return 10000
             elif player == 'p2':
-                return -100
+                return -10000
             else:
                 # draw scenario
                 return 0
@@ -366,7 +366,6 @@ class AgentMiniMax(Agent):
         min_score = + np.inf
         # copy game states before changes are made during the search
         self.copy_game_states(player)
-        
         # iterate through all available moves
         for move_index in tqdm(range(avilable_moves.shape[0])):
             shifted_q, shifted_r = avilable_moves[move_index]
@@ -375,13 +374,13 @@ class AgentMiniMax(Agent):
             # print(f"[Debug]-[play_agent]-player: {player}, select_hex_name: {select_hex_name}")
             # search best move
             game_over, oppn_player, _ = self.agent_make_move(select_hex_name, player)
-            score = self.minimax_ab(player, False, select_hex_name, depth, - np.inf, + np.inf) 
+            score = self.minimax_ab(player, True, select_hex_name, depth, - np.inf, + np.inf) 
             if score < min_score:
                 min_score = score
                 best_hex = select_hex_name
                 self.mark_best_capture_event()
                 best_events = self.game_logics.events[-3:]
-            print(f"player: {player}, score: {score}, min_hex: {best_hex}, min_score: {min_score}")
+            # print(f"player: {player}, score: {score}, min_hex: {best_hex}, min_score: {min_score}")
             # undo move
             player = self.game_logics.undo_events()
         print(f"[Debug]-[play_agent]-best_hex: {best_hex}, last_score: {score}, min_score: {min_score}")
@@ -439,19 +438,26 @@ class AgentMiniMaxTT(AgentMiniMax):
             # pprint(dir_windows)
         # pprint(line_windows)
         line_windows = np.array(line_windows).reshape(-1, cont_size)
-        # oppn_player = self.game_logics.get_opponent_player(player)
+        oppn_player = self.game_logics.get_opponent_player(player)
         # filter_p1 = np.array([1,1,1,1])
         # filter_p2 = np.array([-1,-1,-1,-1])
         filter_p1 = np.array([self.variables.PLAYERS[player]["symbol"] for i in range(cont_size)])
-        # filter_p2 = np.array([self.variables.PLAYERS[oppn_player]["symbol"] for i in range(cont_size)])
-        max_conv = -np.inf
+        filter_p2 = np.array([self.variables.PLAYERS[oppn_player]["symbol"] for i in range(cont_size)])
+        max_conv_fp1 = -np.inf
+        max_conv_fp2 = 0
         for win in line_windows:
             conv_fp1 = np.dot(win, filter_p1)
-            # conv_fp2 = np.dot(win, filter_p2)
-            max_conv = max(max_conv, conv_fp1)
-        return max_conv + cont_size # as the minimum value is -cont_size to make it zero
+            conv_fp2 = np.dot(win, filter_p2)
+            # find the max conv value across all directions
+            max_conv_fp1 = max(max_conv_fp1, conv_fp1)
+            max_conv_fp2 = max(max_conv_fp2, conv_fp2) 
+        if max_conv_fp2>0: # there are nearby opponent players
+            if max_conv_fp2>=2: # opponent close to win
+                max_conv_fp2 *= 2 # add more priority than self win
+                max_conv_fp1 += max_conv_fp2 # add to players value 
 
-    
+        return max_conv_fp1 + cont_size # as the minimum value is -cont_size to make it zero
+
     def static_eval(self, player, pos):
         """
         Static evaluation function -
@@ -465,7 +471,7 @@ class AgentMiniMaxTT(AgentMiniMax):
         pos_value = self.get_player_proximity_center(player) - self.get_player_proximity_center(oppn_player)
         line_conv_val = self.get_line_preference(player, pos)
         statc_val = pos_value + 3 * line_conv_val
-        print(f"[DEBUG]-[static_eval]-player: {player}, pos: {pos}, eval: {[pos_value, line_conv_val]}")
+        # print(f"[DEBUG]-[static_eval]-player: {player}, pos: {pos}, eval: {[pos_value, line_conv_val]}")
         return statc_val
                
     def minimax_ab_TT(self, player: str, select_hex_name: str, depth: int, alpha: int, beta: int) -> int:
@@ -477,9 +483,9 @@ class AgentMiniMaxTT(AgentMiniMax):
         game_over =  self.game_logics.check_game_over(player, select_hex_name)
         if game_over:
             if player == 'p1':
-                return 10
+                return 10000
             elif player == 'p2':
-                return -10
+                return -10000
             else:
                 # draw scenario
                 return 0
@@ -596,8 +602,8 @@ class AgentMiniMaxTT(AgentMiniMax):
                 select_hex_name = self.variables.HEX_GRID_FLAT_MAP[1][shifted_q][shifted_r][-1]
                 # print(f"[Debug]-[play_agent]-[ID]-player: {player}, select_hex_name: {select_hex_name}")
                 # search best move
-                game_over, player, _ = self.agent_make_move(select_hex_name, player)
-                score = self.minimax_ab(player, select_hex_name, depth, - np.inf, + np.inf)
+                game_over, oppn_player, _ = self.agent_make_move(select_hex_name, player)
+                score = self.minimax_ab(player, True, select_hex_name, depth, - np.inf, + np.inf)
                 # before doing search lookup TT
                 # hash_digest = self.trans_table.get_hash_key(self.variables.HEX_GRID_FLAT_MAP[0], player)    
                 # check if table_state, player combo exists in transposition table 
@@ -606,14 +612,14 @@ class AgentMiniMaxTT(AgentMiniMax):
                 #     print(f"[Debug]-[play_agent]-[ID]-00 found match - {player, select_hex_name, depth}")
                 #     (_, score, _, _) = self.trans_table.get_state_value(hash_digest)
                 # else:
-                #     score = self.minimax_ab_TT(player, select_hex_name, depth, - np.inf, + np.inf)
+                #     score = self.minimax_ab_TT(player,False, select_hex_name, depth, - np.inf, + np.inf)
                 if score < min_score:
                     min_score = score
                     best_hex = select_hex_name
                     # if best move lead to capture manipulate events
                     self.mark_best_capture_event()
                     best_events = self.game_logics.events[-3:]
-                # print(f"score: {score}, min_hex: {best_hex}, min_score: {min_score}")
+                # print(f"player: {player}, score: {score}, min_hex: {best_hex}, min_score: {min_score}")
                 # undo move
                 player = self.game_logics.undo_events()
             # print(f"[Debug]-[play_agent]-TT: total entries - {len(self.trans_table.tt_dict.keys())}")
